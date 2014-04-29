@@ -136,8 +136,8 @@ public class ListViewImageActivity extends Activity {
 			Bitmap bmp = BitmapFactory.decodeStream(fin);
 			imgView.setImageBitmap(bmp);
 			imgView.setAdjustViewBounds(true);
-			imgView.setMaxHeight(80);
-			imgView.setMaxWidth(48);
+			imgView.setMaxHeight(432);
+			imgView.setMaxWidth(264);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,10 +162,8 @@ public class ListViewImageActivity extends Activity {
 			//each layout item stored in a vertical linearLayout
 			LinearLayout linearLayout = new LinearLayout(this);
 			linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-
+			linearLayout.setMinimumHeight(300);
 			ImageView imgView = new ImageView(this);
-			imgView.setMaxWidth(10);
-			imgView.setMaxHeight(10);
 			loadImageFromPath(imgView,picName);
 			TextView tv = new TextView(this);
 			tv.setText("this is image"+picName);

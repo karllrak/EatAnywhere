@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 public class SelectEatingPlaceActivity extends Activity {
@@ -19,6 +20,13 @@ public class SelectEatingPlaceActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.select_eating_placeoeat, menu);
 		return true;
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+			Intent addNewContent = new Intent(SelectEatingPlaceActivity.this, Memo.class);
+			startActivity(addNewContent);
+			return super.onOptionsItemSelected(item);
 	}
 	
 	public void one( View v ) {

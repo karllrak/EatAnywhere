@@ -2,47 +2,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/t2"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingLeft="0dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="0dp"
     tools:context=".SelectEatingPlaceActivity" >
-
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginLeft="46dp"
-        android:layout_marginTop="76dp"
-        android:onClick="three"
-        android:text="三食堂" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_centerVertical="true"
-        android:onClick="two"
-        android:text="二食堂" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:onClick="one"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_marginLeft="45dp"
-        android:layout_toRightOf="@+id/button1"
-        android:text="一食堂" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="选择一个地方吧!" />
+        android:text="选择一个地方吧!"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="16dp"
+        android:onClick="two"
+        android:background="@android:color/transparent"
+        android:text="" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button3"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="18dp"
+        android:onClick="three"
+        android:background="@android:color/transparent"
+        android:text="" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="166dp"
+        android:onClick="one"
+        android:background="@android:color/transparent"
+        android:text="" />
 
 </RelativeLayout>
