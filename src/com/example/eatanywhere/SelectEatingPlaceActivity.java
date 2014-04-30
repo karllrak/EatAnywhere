@@ -1,5 +1,6 @@
 package com.example.eatanywhere;
 
+import com.example.eatanywhere.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;

@@ -25,20 +25,25 @@ public final class R {
         public static final int t2=0x7f020001;
     }
     public static final class id {
+        public static final int CancelComment=0x7f080006;
+        public static final int SaveComment=0x7f080005;
         public static final int button1=0x7f080001;
-        public static final int button2=0x7f080004;
-        public static final int button3=0x7f080005;
+        public static final int button2=0x7f080008;
+        public static final int button3=0x7f080009;
+        public static final int comment=0x7f080004;
         public static final int contentTextEdit=0x7f080000;
         public static final int contentTextView=0x7f080002;
-        public static final int main_menu=0x7f080008;
-        public static final int memo_menu=0x7f080006;
-        public static final int memo_menu2=0x7f080007;
-        public static final int textView1=0x7f080003;
+        public static final int main_menu=0x7f08000c;
+        public static final int memo_menu=0x7f08000a;
+        public static final int memo_menu2=0x7f08000b;
+        public static final int photoCommentImgView=0x7f080003;
+        public static final int textView1=0x7f080007;
     }
     public static final class layout {
         public static final int add_content=0x7f030000;
         public static final int content_list_item=0x7f030001;
-        public static final int selecteatingplace=0x7f030002;
+        public static final int photocomment=0x7f030002;
+        public static final int selecteatingplace=0x7f030003;
     }
     public static final class menu {
         public static final int memo_menu=0x7f070000;

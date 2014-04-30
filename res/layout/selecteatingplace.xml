@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:text="选择一个地方吧!"
         android:textSize="20sp" />
-
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"

@@ -31,6 +31,8 @@
             android:name="com.example.eatanywhere.CameraCapture" >
             </activity>
             
+        <activity android:name="com.example.eatanywhere.PhotoComment">
+            </activity>
         <activity android:name="com.example.eatanywhere.Memo" 
             	  android:label="Memo">
         </activity>

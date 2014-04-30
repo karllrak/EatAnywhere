@@ -33,6 +33,30 @@ public class CameraCapture extends Activity {
 
 	private Preview mPreview = null;
 	private Camera mCamera = null;
+	public String mPicName = null;
+
+	
+	public String getPicName() {
+		if ( null == mPicName ) {
+			genPicName();
+		}
+		return mPicName;
+	}
+	
+	public String genPicName() {
+		Calendar cal = Calendar.getInstance();
+		cal.getTime();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
+		mPicName = sdf.format(cal.getTime())+".jpeg";
+		return mPicName;
+	}
+	
+	public void startComment() {
+		Intent it = new Intent();
+		it.putExtra("picName", getPicName());
+		it.setClass(CameraCapture.this, PhotoComment.class);
+		startActivity(it);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +128,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 		Button btn = new Button(context);
 		btn.setText("catch!");
 		mSurfaceView.setOnClickListener(new OnClickListener() {
+			@SuppressLint("SdCardPath")
 			@Override
 			public void onClick(View v) {
 				if ( null != mCamera ) {
@@ -116,12 +141,10 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 							Matrix matrix = new Matrix();
 							matrix.preRotate(90);
 							bmp = bmp.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
-							Calendar cal = Calendar.getInstance();
-					    	cal.getTime();
-					    	SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
+							
 							FileOutputStream out = null;
 							try {
-								out = new FileOutputStream("/sdcard/1pic/"+sdf.format(cal.getTime())+".jpeg");
+								out = new FileOutputStream("/sdcard/1pic/"+((CameraCapture) mActivity).getPicName());
 							} catch (FileNotFoundException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -134,7 +157,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 									e.printStackTrace();
 								}
 							}
-							mActivity.finish();
+							((CameraCapture) mActivity).startComment();
 						}
 					} );
 				}
@@ -151,7 +174,6 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 		int curIndex = 0;
 		int i = 0;
 		for ( i = 0; i < mSupportedPreviewSizes.size(); i++ ) {
-			Log.e("", "size"+mSupportedPreviewSizes.get(i).width+ " "+mSupportedPreviewSizes.get(i).height);
 			if ( mSupportedPreviewSizes.get(i).height > curMax ) {
 				curMax = mSupportedPreviewSizes.get(i).height;
 				curIndex = i;

@@ -33,7 +33,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 public class ListViewImageActivity extends Activity {
-	private String picDirPath=Environment.getExternalStorageDirectory()+"/1pic/";
+	public static String picDirPath=Environment.getExternalStorageDirectory()+"/1pic/";
 	private String picFileType="jpeg";
 	private ScrollView mScrollView=null;
 	private String placeToEat=null;
@@ -126,7 +126,7 @@ public class ListViewImageActivity extends Activity {
 		return result;
 	}
 
-	private boolean loadImageFromPath(ImageView imgView, String imgPath ) {
+	public static boolean loadImageFromPath(ImageView imgView, String imgPath ) {
 		if ( null == imgView ) {
 			return false;
 		}
