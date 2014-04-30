@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.util.Log;
 
 public class DatabaseConnector {
 	private static final String DATABASE_NAME = "Content";
@@ -34,6 +35,12 @@ public class DatabaseConnector {
 		close();
 	}
 	
+	public void rawQuery(String query) {
+		Log.i("try to QUERY", query);
+		open();
+		database.execSQL(query);
+		close();
+	}
 	public Cursor getAllContents() {
 		return database.query("contents", new String[] {"_id", "content"}, null, null, null, null, "content");
 	}
@@ -56,6 +63,15 @@ public class DatabaseConnector {
 			"content TEXT);";
 			db.execSQL(createQuery);
 					
+			String createFoodItem = "create table if not exists foodItem ("+
+				    "creatime timestamp default current_timestamp,"+
+				    "picName text,"+
+				    "userId text,"+
+				    "tag text,"+
+				    "place text"+
+				");";
+			db.execSQL(createFoodItem);
+
 		}
 
 		@Override

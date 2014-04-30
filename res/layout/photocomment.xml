@@ -24,12 +24,14 @@
         <Button
             android:id="@+id/SaveComment"
             android:text="确定"
+            android:onClick="saveComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/CancelComment"
             android:text="取消"
+            android:onClick="cancelComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         
