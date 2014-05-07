@@ -65,7 +65,6 @@ public class CameraCapture extends Activity {
 		mPreview = new Preview(this);
 		//TODO what camera to open?
 		mCamera = Camera.open(0);
-		mCamera.setDisplayOrientation(90);
 		mPreview.setCamera(mCamera);
 		setContentView( mPreview );
 	}
@@ -103,6 +102,7 @@ public class CameraCapture extends Activity {
 		if ( null == mCamera ) {
 			mCamera = Camera.open();
 		}
+		mCamera.setDisplayOrientation(90);
 		mPreview.setCamera(mCamera);	
 	}
 

@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DatabaseConnector {
 	private static final String DATABASE_NAME = "Content";
-	private SQLiteDatabase database;
+	SQLiteDatabase database;
 	private DatabaseOpenHelper databaseOpenHelper;
 	
 	public DatabaseConnector(Context context) {
@@ -37,9 +37,7 @@ public class DatabaseConnector {
 	
 	public void rawQuery(String query) {
 		Log.i("try to QUERY", query);
-		open();
 		database.execSQL(query);
-		close();
 	}
 	public Cursor getAllContents() {
 		return database.query("contents", new String[] {"_id", "content"}, null, null, null, null, "content");
@@ -58,7 +56,14 @@ public class DatabaseConnector {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			String createQuery = "CREATE TABLE contents" +
+			//TODO warning note!
+			//move the statement for onOpen here before release
+		}
+
+		@Override
+		public void onOpen(SQLiteDatabase db) {
+			super.onOpen(db);
+			String createQuery = "CREATE TABLE if not exists contents" +
 			"(_id integer primary key autoincrement, " +
 			"content TEXT);";
 			db.execSQL(createQuery);
@@ -72,6 +77,13 @@ public class DatabaseConnector {
 				");";
 			db.execSQL(createFoodItem);
 
+			String createComment = "create table if not exists foodComment ("+
+					"replyId int,"+
+					"itemId int,"+
+					"creatime timestamp default current_timestamp,"+
+					"content text"+
+					");";
+			db.execSQL(createComment);
 		}
 
 		@Override

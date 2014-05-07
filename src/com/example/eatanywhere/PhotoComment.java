@@ -1,6 +1,8 @@
 package com.example.eatanywhere;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 public class PhotoComment extends Activity {
 
 	private String picName = null;
+	private String mComment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,25 +35,36 @@ public class PhotoComment extends Activity {
 	}
 	
 	public void saveComment( View v ) {
-		String comment = ((EditText)findViewById(R.id.comment)).getText().toString();
-		if ( comment.matches("") ) {
+		mComment = ((EditText)findViewById(R.id.comment)).getText().toString();
+		if ( mComment.matches("") ) {
 			Toast.makeText(this, "请输入评论", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
 		AsyncTask<Object, Object, Object> saveFoodItemTask = 
 				new AsyncTask<Object, Object, Object>() {
+				DatabaseConnector databaseConnector = new DatabaseConnector(PhotoComment.this);
 			@Override
 			protected Object doInBackground(Object... params) {
-				DatabaseConnector databaseConnector = new DatabaseConnector(PhotoComment.this);
 				String query = "insert into foodItem( userId, picName ) values ("+
 						" 'isb911', "+ " '"+picName+"' );";
+				databaseConnector.open();
 				databaseConnector.rawQuery(query);
+				String rowidQuery = "select count(*) from foodItem";
+				Cursor c = databaseConnector.database.rawQuery(rowidQuery, null);
+				c.moveToFirst();
+				int rowid = c.getInt(0);
+				c.close();
+				ContentValues content = new ContentValues();
+				content.put("itemId", rowid);
+				content.put("content", mComment);
+				databaseConnector.database.insert("foodComment", null, content);
 				return null;
 			} 
 
 			@Override
 			protected void onPostExecute(Object result) {
+				databaseConnector.close();
 				finish(); 
 			} 
 		}; 
