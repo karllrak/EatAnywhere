@@ -4,8 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.annotation.SuppressLint;
@@ -32,10 +34,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 
 public class ListViewImageActivity extends Activity {
-	private String picDirPath=Environment.getExternalStorageDirectory()+"/1pic/";
+	//FIXME: why we need asynctask when getPicCommentList
+	public static String picDirPath=Environment.getExternalStorageDirectory()+"/1pic/";
 	private String picFileType="jpeg";
+	private HashMap mItemList;
+	private FoodItem[] mFoodItemList=null;
+	private FoodComment[] mCommentList=null;
 	private ScrollView mScrollView=null;
 	private String placeToEat=null;
 
@@ -47,14 +54,15 @@ public class ListViewImageActivity extends Activity {
 		Intent it = getIntent();
 		placeToEat = it.getStringExtra("placeToEat");
 		Toast.makeText(this, placeToEat, Toast.LENGTH_SHORT).show();
-		
+
 		mScrollView = new ScrollView(this);
 		String[] picFullPathNameArray = getPicNamePathList();
+		getPicCommentList();
 		//filter the image by name( by the XXXXn.jpeg where n is the last number before dot
 		//e.g. 6->0 7->1
 		picFullPathNameArray = filterPictureByName(placeToEat, picFullPathNameArray);
-		
-			
+
+
 		LinearLayout totalLayout = new LinearLayout(this);
 		totalLayout.setOrientation(LinearLayout.VERTICAL);
 		LinearLayout topTxtLayout = new LinearLayout(this);
@@ -120,14 +128,65 @@ public class ListViewImageActivity extends Activity {
 		//setContentView(R.layout.activity_main);
 		setContentView(mScrollView);
 	}
+
 	private void reload(){
+		getPicCommentList();
 		LinearLayout imageLayout = (LinearLayout) mScrollView.getChildAt(0);
 		imageLayout = (LinearLayout) imageLayout.getChildAt(1);
 		imageLayout.removeAllViews();
 		String[] newPicNameList = getPicNamePathList();
 		newPicNameList = filterPictureByName(placeToEat,newPicNameList);
 		loadImageList(imageLayout,newPicNameList);
+		/* so asynctask 
+		newPicNameList = filterPictureByName(placeToEat,newPicNameList);
+		loadImageList(imageLayout,newPicNameList);
+		 */
 	}
+
+	private void getPicCommentList() {
+		//load the picture comment into mFoodComment
+		DatabaseConnector databaseConnector = new DatabaseConnector(ListViewImageActivity.this);
+		databaseConnector.open();
+		//load the picname first
+		Cursor c = databaseConnector.database.query("foodItem", new String[] {"picName", "rowid"}, null, null, null, null, null);
+		Log.e("", ""+c.getCount());
+		mFoodItemList = new FoodItem[c.getCount()];
+		for (int i = 0; i < mFoodItemList.length; i++ ) {
+			mFoodItemList[i] = new FoodItem();
+		}
+		String tmpPicName = null;
+		int i = 0;
+		int rowid = 0;
+		while ( c.moveToNext() ) {
+			tmpPicName = c.getString(0);
+			rowid = c.getInt(1);
+			mFoodItemList[i].setPicName(tmpPicName);
+			mFoodItemList[i].setId(rowid);
+
+			i++;
+		}
+		c.close();
+		//load the comments
+		c = databaseConnector.database.query("foodComment", 
+				new String[] {"itemId", "content"}, null, null, null, null, null);
+		mCommentList = new FoodComment[c.getCount()]; 
+		for (int j = 0; j < mCommentList.length; j++ ) {
+			mCommentList[j] = new FoodComment();
+		}
+		i = 0;
+		int tmpId = 0;
+		String tmpContent = null;
+		while ( c.moveToNext() ) {
+			tmpId = c.getInt(0);
+			tmpContent = c.getString(1);
+			mCommentList[i].setContent(tmpContent);
+			mCommentList[i].setItemId(tmpId);
+			i++;
+		}
+		c.close();
+		databaseConnector.close();
+	}
+
 	private String[] getPicNamePathList() {
 		File picDir = new File(picDirPath);
 		return picDir.list(new FilenameFilter(){
@@ -139,6 +198,7 @@ public class ListViewImageActivity extends Activity {
 				return false;
 			}});
 	}
+
 	private String[] filterPictureByName(String placeToEat, String[] arr ) {
 		int n = 0;
 		if ( placeToEat.equals("one") ) {
@@ -161,7 +221,7 @@ public class ListViewImageActivity extends Activity {
 		return result;
 	}
 
-	private boolean loadImageFromPath(ImageView imgView, String imgPath ) {
+	public static boolean loadImageFromPath(ImageView imgView, String imgPath ) {
 		if ( null == imgView ) {
 			return false;
 		}
@@ -189,12 +249,15 @@ public class ListViewImageActivity extends Activity {
 				.getBounds().width()/2, imgView.getDrawable().getBounds().height()/2); 
 		imgView.setImageMatrix(matrix);
 	}
+
 	private boolean loadImageList( View v, String[] picNameArray ) {
 		LinearLayout totalLayout = new LinearLayout(this);
 		totalLayout.setOrientation(LinearLayout.VERTICAL);
 
-		for ( String picName: picNameArray ) {
+		//for ( String picName: picNameArray ) {
+		for ( FoodItem item : mFoodItemList ) {
 			//each layout item stored in a vertical linearLayout
+			String picName = item.getPicName();
 			LinearLayout linearLayout = new LinearLayout(this);
 			linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 			linearLayout.setMinimumHeight(300);
@@ -225,7 +288,20 @@ public class ListViewImageActivity extends Activity {
 			txt.setOrientation(LinearLayout.VERTICAL);
 			
 			TextView tv1 = new TextView(this);
-			tv1.setText("this is image"+picName);
+
+			int i = 0;
+			String comment = "NO COMMENTS";
+			for ( i = 0; i < mCommentList.length; i++ ) {
+				if ( mCommentList[i].getItemId() ==  item.getId() ) {
+					comment = mCommentList[i].getContent();
+				}
+			}
+			//tv.setText("this is image"+picName+'\n'+comment);
+			if ( null != comment && comment.length() > 0 ) {
+				tv1.setText("this is image"+picName+'\n'+comment);
+			} else {
+				tv1.setText("");
+			}
 			
 			TextView tv2 = new TextView(this);
 			tv2.setText("user: local");
@@ -246,7 +322,6 @@ public class ListViewImageActivity extends Activity {
 			txt.addView(tv3);
 
 			
-
 			linearLayout.addView(vote);
 			linearLayout.addView(imgView);
 			linearLayout.addView(txt);
@@ -257,6 +332,7 @@ public class ListViewImageActivity extends Activity {
 		((ViewGroup) v).addView(totalLayout);
 		return true;
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

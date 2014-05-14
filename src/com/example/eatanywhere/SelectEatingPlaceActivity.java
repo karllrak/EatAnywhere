@@ -1,5 +1,6 @@
 package com.example.eatanywhere;
 
+import com.example.eatanywhere.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class SelectEatingPlaceActivity extends Activity {
+	public static String mServerIp = "10.254.239.1:8080";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +25,19 @@ public class SelectEatingPlaceActivity extends Activity {
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
-			Intent addNewContent = new Intent(SelectEatingPlaceActivity.this, Memo.class);
-			startActivity(addNewContent);
-			return super.onOptionsItemSelected(item);
+		Intent it = null;
+		switch ( item.getItemId() ) {
+		case R.id.main_menu:
+			it = new Intent(SelectEatingPlaceActivity.this, Memo.class);
+			break;
+		case R.id.login_menu:
+			it = new Intent(SelectEatingPlaceActivity.this, LoginActivity.class);
+			break;
+		}
+		if ( null != it ) {
+			startActivity(it);
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	public void one( View v ) {
@@ -44,6 +55,7 @@ public class SelectEatingPlaceActivity extends Activity {
 	public void three( View v ) {
 		Intent it = new Intent();
 		it.putExtra("placeToEat", "three");
+		//it.setClass(SelectEatingPlaceActivity.this, ListViewImageActivity.class);
 		it.setClass(SelectEatingPlaceActivity.this, ListViewImageActivity.class);
 		startActivity(it);
 	}

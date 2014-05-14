@@ -7,10 +7,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.util.Log;
 
 public class DatabaseConnector {
 	private static final String DATABASE_NAME = "Content";
-	private SQLiteDatabase database;
+	SQLiteDatabase database;
 	private DatabaseOpenHelper databaseOpenHelper;
 	
 	public DatabaseConnector(Context context) {
@@ -34,6 +35,10 @@ public class DatabaseConnector {
 		close();
 	}
 	
+	public void rawQuery(String query) {
+		Log.i("try to QUERY", query);
+		database.execSQL(query);
+	}
 	public Cursor getAllContents() {
 		return database.query("contents", new String[] {"_id", "content"}, null, null, null, null, "content");
 	}
@@ -51,11 +56,34 @@ public class DatabaseConnector {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			String createQuery = "CREATE TABLE contents" +
+			//TODO warning note!
+			//move the statement for onOpen here before release
+		}
+
+		@Override
+		public void onOpen(SQLiteDatabase db) {
+			super.onOpen(db);
+			String createQuery = "CREATE TABLE if not exists contents" +
 			"(_id integer primary key autoincrement, " +
 			"content TEXT);";
 			db.execSQL(createQuery);
 					
+			String createFoodItem = "create table if not exists foodItem ("+
+				    "creatime timestamp default current_timestamp,"+
+				    "picName text,"+
+				    "userId text,"+
+				    "tag text,"+
+				    "place text"+
+				");";
+			db.execSQL(createFoodItem);
+
+			String createComment = "create table if not exists foodComment ("+
+					"replyId int,"+
+					"itemId int,"+
+					"creatime timestamp default current_timestamp,"+
+					"content text"+
+					");";
+			db.execSQL(createComment);
 		}
 
 		@Override
