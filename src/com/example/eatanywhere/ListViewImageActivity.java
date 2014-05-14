@@ -27,6 +27,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
@@ -56,8 +57,26 @@ public class ListViewImageActivity extends Activity {
 			
 		LinearLayout totalLayout = new LinearLayout(this);
 		totalLayout.setOrientation(LinearLayout.VERTICAL);
+		LinearLayout topTxtLayout = new LinearLayout(this);
+		topTxtLayout.setGravity(Gravity.CENTER);
+		
+
 		LinearLayout topBtnLayout = new LinearLayout(this);
+
+			
+		TextView tv = new TextView(this);
+		tv.setTextSize(20);
+		if ( placeToEat.equals("one") ) {
+			tv.setText("第一食堂");
+		} else if ( placeToEat.equals("two") ) {
+			tv.setText("第二食堂");
+		} else {
+			tv.setText("第三食堂");
+		}
+
+		
 		Button btn = new Button(this);
+		
 		btn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
@@ -67,18 +86,34 @@ public class ListViewImageActivity extends Activity {
 			}});
 		btn.setText("拍照");
 		Button btnReload = new Button(this);
+		
 		btnReload.setText("刷新");
 		btnReload.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				reload();
 			}});
+		
+		Spinner sp = new Spinner(this);
+		String[] spitem = new String[] {"按时间排序", "按评分排序"};		
+		ArrayAdapter<String> spAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, spitem);
+		sp.setAdapter(spAdapter);
+		TextView txtb = new TextView(this);
+		txtb.setText("                       ");
+
+		
+		topTxtLayout.addView(tv);
 		topBtnLayout.addView(btn);
 		topBtnLayout.addView(btnReload);
+		topBtnLayout.addView(txtb);
+		topBtnLayout.addView(sp);
+		
+		
 		LinearLayout imageLayout = new LinearLayout(this);
 		imageLayout.setOrientation(LinearLayout.VERTICAL);
 		loadImageList(imageLayout, picFullPathNameArray);
 
+		totalLayout.addView(topTxtLayout);
 		totalLayout.addView(topBtnLayout);
 		totalLayout.addView(imageLayout);
 		mScrollView.addView(totalLayout);
@@ -136,8 +171,8 @@ public class ListViewImageActivity extends Activity {
 			Bitmap bmp = BitmapFactory.decodeStream(fin);
 			imgView.setImageBitmap(bmp);
 			imgView.setAdjustViewBounds(true);
-			imgView.setMaxHeight(432);
-			imgView.setMaxWidth(264);
+			imgView.setMaxHeight(300);
+			imgView.setMaxWidth(150);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -163,13 +198,58 @@ public class ListViewImageActivity extends Activity {
 			LinearLayout linearLayout = new LinearLayout(this);
 			linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 			linearLayout.setMinimumHeight(300);
+			
+			
+			LinearLayout vote = new LinearLayout(this);
+			vote.setOrientation(LinearLayout.VERTICAL);
+			Button up = new Button(this);			
+			up.setBackgroundResource(R.drawable.up);
+			
+			TextView ze = new TextView(this);
+			ze.setText("0");
+			ze.setTextSize(18);
+			ze.setGravity(Gravity.CENTER);
+			
+			Button down = new Button(this);			
+			down.setBackgroundResource(R.drawable.down);
+			vote.addView(up);
+			vote.addView(ze);
+			vote.addView(down);
+			
+			
+			
 			ImageView imgView = new ImageView(this);
 			loadImageFromPath(imgView,picName);
-			TextView tv = new TextView(this);
-			tv.setText("this is image"+picName);
+			
+			LinearLayout txt = new LinearLayout(this);
+			txt.setOrientation(LinearLayout.VERTICAL);
+			
+			TextView tv1 = new TextView(this);
+			tv1.setText("this is image"+picName);
+			
+			TextView tv2 = new TextView(this);
+			tv2.setText("user: local");
+			TextView tv3 = new TextView(this);
+			tv3.setText("time: just now");
+			TextView tv4 = new TextView(this);
+			tv4.setText(" ");
+			TextView tv5 = new TextView(this);
+			tv5.setText(" ");
+			
 
+			txt.addView(tv1);
+			
+			
+			txt.addView(tv4);
+			txt.addView(tv5);
+			txt.addView(tv2);
+			txt.addView(tv3);
+
+			
+
+			linearLayout.addView(vote);
 			linearLayout.addView(imgView);
-			linearLayout.addView(tv);
+			linearLayout.addView(txt);
 			totalLayout.addView(linearLayout);
 			//add it to the listview lv
 		}
