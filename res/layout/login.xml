@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+
+<!--
+     Demonstrates an activity with a fancy translucent background.
+     See corresponding Java code com.android.sdk.app.TranslucentBackground.java.
+-->
+
+
+<!-- This screen consists of a single text field that displays some text. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/login_loginName"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="用户名" />
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/login_loginName"
+        android:ems="10"
+        android:hint="密码"
+        android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/login_OK"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_password"
+            android:onClick="login"
+            android:layout_alignLeft="@id/login_password"
+            android:background="#80218a"
+            android:text="确定" />
+
+       
+        <Button
+            android:id="@+id/login_register"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/login_OK"
+            android:layout_alignRight="@+id/login_password"
+            android:onClick="register"
+            android:background="#8877aa"
+            android:text="注册"
+            android:textColor="#22eeff"
+			/>
+
+    <Button
+        android:id="@+id/login_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/login_register"
+        android:layout_below="@+id/login_OK"
+        android:layout_marginTop="58dp"
+        android:onClick="cancelLogin"
+        android:text="取消" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

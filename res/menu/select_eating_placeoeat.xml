@@ -4,6 +4,10 @@
     <item android:id="@+id/main_menu"
         android:title="Memo"
         ></item>
+    <item android:id="@+id/login_menu"
+        android:title="登录/注册"
+        ></item>
+
 
 
 </menu>

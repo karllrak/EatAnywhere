@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/loginName"
+        android:hint="用户名/帐号"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="密码"
+        android:ems="10"
+        android:inputType="textPassword" >
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/passAgain"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="确认密码"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+    <Button
+        android:id="@+id/btnOK"
+        android:onClick="register"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:text="确定" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:onClick="cancelRegister"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:text="取消" />
+	</LinearLayout>
+
+</LinearLayout>
