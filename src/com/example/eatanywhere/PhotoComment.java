@@ -7,25 +7,37 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class PhotoComment extends Activity {
 
-	private String picName = null;
+	private String mPicName = null;
+	private String mPlace = null;
 	private String mComment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		picName = getIntent().getStringExtra("picName");
+		mPicName = getIntent().getStringExtra("picName");
 		setContentView(R.layout.photocomment);
+		Spinner placeSelectSpinner = (Spinner) findViewById(R.id.photocomment_spinner);
+		String[] placeList = PhotoComment.getPlaceList();
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, placeList);
+		placeSelectSpinner.setAdapter(adapter);
 		loadPreviewImage();
+	}
+
+	private static String[] getPlaceList() {
+		// TODO Auto-generated method stub
+		return new String[]{ "一食堂", "二食堂", "三食堂" };
 	}
 
 	private void loadPreviewImage() {
 		ImageView imgView = (ImageView)findViewById(R.id.photoCommentImgView);
-		ListViewImageActivity.loadImageFromPath(imgView, picName);
+		ListViewImageActivity.loadImageFromPath(imgView, mPicName);
 	}
 
 	@Override
@@ -36,6 +48,7 @@ public class PhotoComment extends Activity {
 	
 	public void saveComment( View v ) {
 		mComment = ((EditText)findViewById(R.id.comment)).getText().toString();
+		mPlace = (String) ((Spinner)findViewById(R.id.photocomment_spinner)).getSelectedItem();
 		if ( mComment.matches("") ) {
 			Toast.makeText(this, "请输入评论", Toast.LENGTH_SHORT).show();
 			return;
@@ -46,8 +59,12 @@ public class PhotoComment extends Activity {
 				DatabaseConnector databaseConnector = new DatabaseConnector(PhotoComment.this);
 			@Override
 			protected Object doInBackground(Object... params) {
-				String query = "insert into foodItem( userId, picName ) values ("+
-						" 'isb911', "+ " '"+picName+"' );";
+				//get the selected place
+				String query = "insert into foodItem( userId, picName, place ) values ("+
+						" 'isb911', " +
+						" '"+mPicName+"', "+
+						" '"+mPicName+"' "+
+						" );";
 				databaseConnector.open();
 				databaseConnector.rawQuery(query);
 				String rowidQuery = "select count(*) from foodItem";
