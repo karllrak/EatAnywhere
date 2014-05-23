@@ -135,29 +135,34 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 					mCamera.takePicture(null, null, new Camera.PictureCallback() {
 						@Override
 						public void onPictureTaken(byte[] data, Camera camera) {
-							mCamera.stopPreview();
-							Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-							//rotate it!
-							Matrix matrix = new Matrix();
-							matrix.preRotate(90);
-							bmp = bmp.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
-							
-							FileOutputStream out = null;
-							try {
-								out = new FileOutputStream("/sdcard/1pic/"+((CameraCapture) mActivity).getPicName());
-							} catch (FileNotFoundException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} finally{
-								bmp.compress(Bitmap.CompressFormat.JPEG, 90, out);
-								try {
-									out.close();
-								} catch (IOException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+							final byte[] picData = data;
+							Runnable savePicThread = new Runnable() {
+								public void run(){
+									Bitmap bmp = BitmapFactory.decodeByteArray(picData, 0, picData.length);
+									//rotate it!
+									Matrix matrix = new Matrix();
+									matrix.preRotate(90);
+									bmp = bmp.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
+
+									FileOutputStream out = null;
+									try {
+										out = new FileOutputStream("/sdcard/1pic/"+((CameraCapture) mActivity).getPicName());
+									} catch (FileNotFoundException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} finally{
+										bmp.compress(Bitmap.CompressFormat.JPEG, 90, out);
+										try {
+											out.close();
+										} catch (IOException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+									}
 								}
-							}
-							((CameraCapture) mActivity).startComment();
+							};
+							new Thread(savePicThread).start();
+							((CameraCapture) mActivity).startComment();								
 						}
 					} );
 				}
@@ -226,7 +231,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 			final int height = arg4-arg2;
 			child.layout(0, 0, mPreviewSize.height, mPreviewSize.width);
 			final View clickToCapture = getChildAt(1);
-			clickToCapture.layout(mPreviewSize.height/2, mPreviewSize.width/2, 
+			clickToCapture.layout(mPreviewSize.height/2-40, mPreviewSize.width/2, 
 					mPreviewSize.height, mPreviewSize.width);
 			/*
 			final View btn = getChildAt(1);
