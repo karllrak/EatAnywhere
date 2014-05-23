@@ -129,10 +129,23 @@ public class ListViewImageActivity extends Activity {
 		setContentView(mScrollView);
 	}
 
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		mScrollView = null;
+		super.onStop();
+	}
+
 	private void reload(){
 		getPicCommentList();
 		LinearLayout imageLayout = (LinearLayout) mScrollView.getChildAt(0);
-		imageLayout = (LinearLayout) imageLayout.getChildAt(1);
+		imageLayout = (LinearLayout) imageLayout.getChildAt(2);
 		imageLayout.removeAllViews();
 		String[] newPicNameList = getPicNamePathList();
 		newPicNameList = filterPictureByName(placeToEat,newPicNameList);
@@ -228,7 +241,10 @@ public class ListViewImageActivity extends Activity {
 		FileInputStream fin = null;
 		try {
 			fin = new FileInputStream(picDirPath+imgPath);
-			Bitmap bmp = BitmapFactory.decodeStream(fin);
+			BitmapFactory.Options opt = new BitmapFactory.Options();
+			opt.inScaled = true;
+			opt.inTargetDensity = opt.inScreenDensity / 30;
+			Bitmap bmp = BitmapFactory.decodeStream(fin, null, opt);
 			imgView.setImageBitmap(bmp);
 			imgView.setAdjustViewBounds(true);
 			imgView.setMaxHeight(300);
@@ -258,37 +274,20 @@ public class ListViewImageActivity extends Activity {
 		for ( FoodItem item : mFoodItemList ) {
 			//each layout item stored in a vertical linearLayout
 			String picName = item.getPicName();
-			LinearLayout linearLayout = new LinearLayout(this);
-			linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-			linearLayout.setMinimumHeight(300);
 			
+			PcvLayout layout = new PcvLayout(this);
+
+			Button up = (Button) layout.findViewById(R.id.bup);			
 			
-			LinearLayout vote = new LinearLayout(this);
-			vote.setOrientation(LinearLayout.VERTICAL);
-			Button up = new Button(this);			
-			up.setBackgroundResource(R.drawable.up);
+			TextView vnumber = (TextView) layout.findViewById(R.id.vnumber);
+			vnumber.setText("0");		
 			
-			TextView ze = new TextView(this);
-			ze.setText("0");
-			ze.setTextSize(18);
-			ze.setGravity(Gravity.CENTER);
-			
-			Button down = new Button(this);			
-			down.setBackgroundResource(R.drawable.down);
-			vote.addView(up);
-			vote.addView(ze);
-			vote.addView(down);
-			
-			
-			
-			ImageView imgView = new ImageView(this);
+			Button down = (Button) layout.findViewById(R.id.bdown);			
+	
+			ImageView imgView = (ImageView) layout.findViewById(R.id.playout);
 			loadImageFromPath(imgView,picName);
 			
-			LinearLayout txt = new LinearLayout(this);
-			txt.setOrientation(LinearLayout.VERTICAL);
-			
-			TextView tv1 = new TextView(this);
-
+			TextView tv1 = (TextView) layout.findViewById(R.id.comment);
 			int i = 0;
 			String comment = "NO COMMENTS";
 			for ( i = 0; i < mCommentList.length; i++ ) {
@@ -301,31 +300,14 @@ public class ListViewImageActivity extends Activity {
 				tv1.setText("this is image"+picName+'\n'+comment);
 			} else {
 				tv1.setText("");
-			}
-			
-			TextView tv2 = new TextView(this);
-			tv2.setText("user: local");
-			TextView tv3 = new TextView(this);
-			tv3.setText("time: just now");
-			TextView tv4 = new TextView(this);
-			tv4.setText(" ");
-			TextView tv5 = new TextView(this);
-			tv5.setText(" ");
-			
-
-			txt.addView(tv1);
-			
-			
-			txt.addView(tv4);
-			txt.addView(tv5);
-			txt.addView(tv2);
-			txt.addView(tv3);
+			}			
+			TextView user = (TextView) layout.findViewById(R.id.user);
+			user.setText("user: local");
+			TextView time = (TextView) layout.findViewById(R.id.time);
+			time.setText("time: just now");
 
 			
-			linearLayout.addView(vote);
-			linearLayout.addView(imgView);
-			linearLayout.addView(txt);
-			totalLayout.addView(linearLayout);
+			totalLayout.addView(layout);
 			//add it to the listview lv
 		}
 
