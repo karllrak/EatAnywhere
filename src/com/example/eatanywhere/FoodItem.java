@@ -1,6 +1,8 @@
 package com.example.eatanywhere;
 
-public class FoodItem {
+import java.io.Serializable;
+
+public class FoodItem implements Serializable {
 /*
   create table if not exists foodItem (
     creatime timestamp default current_timestamp,
@@ -17,6 +19,7 @@ public class FoodItem {
 	private String userId=null;
 	private String tag=null;
 	private String place=null;
+	private boolean isLocal=false;
 	public int getId() { 
 		return id;
 	}

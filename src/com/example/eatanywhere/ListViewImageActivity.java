@@ -274,6 +274,7 @@ public class ListViewImageActivity extends Activity {
 		for ( FoodItem item : mFoodItemList ) {
 			//each layout item stored in a vertical linearLayout
 			String picName = item.getPicName();
+			String place = item.getPlace();
 			
 			PcvLayout layout = new PcvLayout(this);
 
@@ -286,6 +287,7 @@ public class ListViewImageActivity extends Activity {
 	
 			ImageView imgView = (ImageView) layout.findViewById(R.id.playout);
 			loadImageFromPath(imgView,picName);
+			imgView.setOnClickListener(new MyOnClick(item));
 			
 			TextView tv1 = (TextView) layout.findViewById(R.id.comment);
 			int i = 0;
@@ -301,6 +303,8 @@ public class ListViewImageActivity extends Activity {
 			} else {
 				tv1.setText("");
 			}			
+			tv1.setOnClickListener(new MyOnClick(item));
+			
 			TextView user = (TextView) layout.findViewById(R.id.user);
 			user.setText("user: local");
 			TextView time = (TextView) layout.findViewById(R.id.time);
@@ -320,6 +324,21 @@ public class ListViewImageActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		//getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	private class MyOnClick implements OnClickListener{
+		private FoodItem f;
+		
+		public MyOnClick(FoodItem _f) {
+			f = _f;
+		}
+		
+		@Override
+		public void onClick(View v) {
+			Intent it = new Intent();
+			it.putExtra("foodItem", f);
+			it.setClass(ListViewImageActivity.this, FoodItemShowActivity.class);
+			startActivity(it);
+		}
 	}
 
 }
