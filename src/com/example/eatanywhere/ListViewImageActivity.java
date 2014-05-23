@@ -5,7 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +37,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -45,6 +51,7 @@ public class ListViewImageActivity extends Activity {
 	private FoodComment[] mCommentList=null;
 	private ScrollView mScrollView=null;
 	private String placeToEat=null;
+	private String mServerResultString;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +145,7 @@ public class ListViewImageActivity extends Activity {
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
-		mScrollView = null;
+		//mScrollView = null;
 		super.onStop();
 	}
 
@@ -273,17 +280,130 @@ public class ListViewImageActivity extends Activity {
 		//for ( String picName: picNameArray ) {
 		for ( FoodItem item : mFoodItemList ) {
 			//each layout item stored in a vertical linearLayout
-			String picName = item.getPicName();
+			final String picName = item.getPicName();
 			String place = item.getPlace();
 			
 			PcvLayout layout = new PcvLayout(this);
 
-			Button up = (Button) layout.findViewById(R.id.bup);			
+			Button up = (Button) layout.findViewById(R.id.bup);
+			
+			up.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View arg0) {
+					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+					nameValuePairs.add(new BasicNameValuePair("loginName", LoginActivity.loginName));
+					nameValuePairs.add(new BasicNameValuePair("token", LoginActivity.userToken));
+					nameValuePairs.add(new BasicNameValuePair("picName", picName));
+					nameValuePairs.add(new BasicNameValuePair("type", "1"));
+					
+					PostEntity pe = new PostEntity(nameValuePairs, SelectEatingPlaceActivity.mServerIp+"/vote" );
+					MyNetworkTask netTask = new MyNetworkTask(pe){
+						@Override
+						public void postHook() {
+							mServerResultString = postNameValuePairs();
+						}
+						
+
+						@Override
+						public void afterPost() {
+							ListViewImageActivity.this.runOnUiThread(new Runnable(){
+
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									if ( mServerResultString.equals("ok")) {
+										Toast.makeText(ListViewImageActivity.this, "同步照片成功", Toast.LENGTH_SHORT).show();
+										ToggleButton btn = (ToggleButton) findViewById(R.id.fooditemshow_toggleButton);
+										btn.setChecked(true);
+									}
+									else {
+										String failReason = LoginActivity.isLoginOrReasonString(mServerResultString);
+										if ( null != failReason ) {
+											Toast.makeText(ListViewImageActivity.this, failReason, Toast.LENGTH_SHORT).show();
+											if ( failReason.equals("请登录" ) ) {
+												Intent it = new Intent();
+												it.setClass(ListViewImageActivity.this, LoginActivity.class);
+												startActivityForResult(it, 0);
+											}
+										}
+										else {
+											Toast.makeText(ListViewImageActivity.this, "同步照片失败", Toast.LENGTH_SHORT).show();
+										}
+										ToggleButton btn = (ToggleButton) findViewById(R.id.fooditemshow_toggleButton);
+										btn.setChecked(false);
+									}
+										
+									
+								}
+
+							
+							});
+						}
+					};
+					netTask.execute("");
+				}});
+			
 			
 			TextView vnumber = (TextView) layout.findViewById(R.id.vnumber);
 			vnumber.setText("0");		
 			
-			Button down = (Button) layout.findViewById(R.id.bdown);			
+			Button down = (Button) layout.findViewById(R.id.bdown);		
+			
+			down.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View arg0) {
+					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+					nameValuePairs.add(new BasicNameValuePair("loginName", LoginActivity.loginName));
+					nameValuePairs.add(new BasicNameValuePair("token", LoginActivity.userToken));
+					nameValuePairs.add(new BasicNameValuePair("picName", picName));
+					nameValuePairs.add(new BasicNameValuePair("type", "-1"));
+					
+					PostEntity pe = new PostEntity(nameValuePairs, SelectEatingPlaceActivity.mServerIp+"/vote" );
+					MyNetworkTask netTask = new MyNetworkTask(pe){
+						@Override
+						public void postHook() {
+							mServerResultString = postNameValuePairs();
+						}
+						
+
+						@Override
+						public void afterPost() {
+							ListViewImageActivity.this.runOnUiThread(new Runnable(){
+
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									if ( mServerResultString.equals("ok")) {
+										Toast.makeText(ListViewImageActivity.this, "同步照片成功", Toast.LENGTH_SHORT).show();
+										ToggleButton btn = (ToggleButton) findViewById(R.id.fooditemshow_toggleButton);
+										btn.setChecked(true);
+									}
+									else {
+										String failReason = LoginActivity.isLoginOrReasonString(mServerResultString);
+										if ( null != failReason ) {
+											Toast.makeText(ListViewImageActivity.this, failReason, Toast.LENGTH_SHORT).show();
+											if ( failReason.equals("请登录" ) ) {
+												Intent it = new Intent();
+												it.setClass(ListViewImageActivity.this, LoginActivity.class);
+												startActivityForResult(it, 0);
+											}
+										}
+										else {
+											Toast.makeText(ListViewImageActivity.this, "同步照片失败", Toast.LENGTH_SHORT).show();
+										}
+										ToggleButton btn = (ToggleButton) findViewById(R.id.fooditemshow_toggleButton);
+										btn.setChecked(false);
+									}
+										
+									
+								}
+
+							
+							});
+						}
+					};
+					netTask.execute("");
+				}});
 	
 			ImageView imgView = (ImageView) layout.findViewById(R.id.playout);
 			loadImageFromPath(imgView,picName);
