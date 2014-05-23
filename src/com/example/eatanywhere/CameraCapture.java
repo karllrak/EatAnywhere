@@ -46,7 +46,7 @@ public class CameraCapture extends Activity {
 	public String genPicName() {
 		Calendar cal = Calendar.getInstance();
 		cal.getTime();
-		SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		mPicName = sdf.format(cal.getTime())+(int)(65535*Math.random())+".jpeg";
 		return mPicName;
 	}

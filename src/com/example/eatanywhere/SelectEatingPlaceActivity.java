@@ -55,7 +55,6 @@ public class SelectEatingPlaceActivity extends Activity {
 	public void three( View v ) {
 		Intent it = new Intent();
 		it.putExtra("placeToEat", "three");
-		//it.setClass(SelectEatingPlaceActivity.this, ListViewImageActivity.class);
 		it.setClass(SelectEatingPlaceActivity.this, ListViewImageActivity.class);
 		startActivity(it);
 	}

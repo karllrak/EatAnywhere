@@ -12,12 +12,15 @@ import org.json.JSONTokener;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 
+	public static String userToken = null;
+	public static String loginName = null;
 	public String mServerResultString="";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,8 @@ public class LoginActivity extends Activity {
 	}
 	
 	public void cancelLogin( View v ) {
+		//we cancelled the login so set result 0, see FoodItemShowActivity
+		setResult(1);
 		finish();
 	}
 	
@@ -61,6 +66,7 @@ public class LoginActivity extends Activity {
 						// TODO Auto-generated method stub
 						try {
 							if ( isLoginSucceeded() ) {
+								setNewLoginToken();
 								Toast.makeText( LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 								finish();
 							}
@@ -93,6 +99,40 @@ public class LoginActivity extends Activity {
 		JSONObject obj = (JSONObject) new JSONTokener(mServerResultString).nextValue();
 		int success = Integer.parseInt(obj.getString("s"));
 		return 1 == success;
+	}
+
+	private void setNewLoginToken() {
+		try {
+			JSONObject obj = (JSONObject) new JSONTokener(mServerResultString).nextValue();
+			userToken = obj.getString("token");
+			Log.e("", "get token"+userToken);
+			loginName = obj.getString("loginName");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("", "set Token failed with mServerString\n"+mServerResultString );
+		}
+	}
+
+	public static String isLoginOrReasonString( String serverResult ) {
+		//return the reason of login failed
+		//or return null
+		JSONObject obj = null;
+		try {
+			obj = (JSONObject) new JSONTokener(serverResult).nextValue();
+		}
+		catch ( JSONException e ) {
+			//not a json string
+			e.printStackTrace();
+			return serverResult;
+		}
+
+		try{
+			return obj.getString("err");
+		} catch ( JSONException e ) {
+			//no error
+			return null;
+		}
 	}
 
 	public void register( View v ) {

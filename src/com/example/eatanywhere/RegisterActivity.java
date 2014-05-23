@@ -90,7 +90,7 @@ public class RegisterActivity extends Activity {
 			Toast.makeText(this, "用户名已存在", Toast.LENGTH_SHORT).show();
 		}
 		else {
-			Toast.makeText(this, "注册失败", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "注册失败 "+reason, Toast.LENGTH_SHORT).show();
 		}
 	}
 
