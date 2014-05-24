@@ -138,7 +138,10 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 							final byte[] picData = data;
 							Runnable savePicThread = new Runnable() {
 								public void run(){
-									Bitmap bmp = BitmapFactory.decodeByteArray(picData, 0, picData.length);
+									
+									BitmapFactory.Options opts = new BitmapFactory.Options();
+									opts.inSampleSize = 4;
+									Bitmap bmp = BitmapFactory.decodeByteArray(picData, 0, picData.length, opts);
 									//rotate it!
 									Matrix matrix = new Matrix();
 									matrix.preRotate(90);
@@ -159,6 +162,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 											e.printStackTrace();
 										}
 									}
+									bmp.recycle();System.gc();
 								}
 							};
 							new Thread(savePicThread).start();

@@ -419,7 +419,7 @@ public class ListViewImageActivity extends Activity {
 			}
 			//tv.setText("this is image"+picName+'\n'+comment);
 			if ( null != comment && comment.length() > 0 ) {
-				tv1.setText("this is image"+picName+'\n'+comment);
+				tv1.setText(comment);
 			} else {
 				tv1.setText("");
 			}			
