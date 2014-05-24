@@ -18,7 +18,8 @@
 
     <EditText
         android:id="@+id/comment"
-        android:layout_width="wrap_content"
+        android:layout_width="240dip"
+        android:background="@drawable/betteredittext"
         android:layout_height="wrap_content"
         android:hint="评论两句..." />
 
@@ -27,13 +28,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/SaveComment"
+            android:background="@drawable/betterbutton"
             android:text="确定"
             android:onClick="saveComment"
             android:layout_width="wrap_content"
@@ -41,12 +43,15 @@
 
         <Button
             android:id="@+id/CancelComment"
-            android:text="取消"
-            android:onClick="cancelComment"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/SaveComment"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/betterbutton"
+            android:onClick="cancelComment"
+            android:text="取消" />
         
-    </LinearLayout>
+    </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>
