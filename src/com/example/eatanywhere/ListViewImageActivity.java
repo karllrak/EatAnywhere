@@ -51,7 +51,7 @@ public class ListViewImageActivity extends Activity {
 	private FoodComment[] mCommentList=null;
 	private ScrollView mScrollView=null;
 	private String placeToEat=null;
-	private String mServerResultString;
+	private String mServerResultString = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -168,20 +168,23 @@ public class ListViewImageActivity extends Activity {
 		DatabaseConnector databaseConnector = new DatabaseConnector(ListViewImageActivity.this);
 		databaseConnector.open();
 		//load the picname first
-		Cursor c = databaseConnector.database.query("foodItem", new String[] {"picName", "rowid"}, null, null, null, null, null);
+		Cursor c = databaseConnector.database.query("foodItem", new String[] {"picName", "rowid","place"}, null, null, null, null, null);
 		Log.e("", ""+c.getCount());
 		mFoodItemList = new FoodItem[c.getCount()];
 		for (int i = 0; i < mFoodItemList.length; i++ ) {
 			mFoodItemList[i] = new FoodItem();
 		}
 		String tmpPicName = null;
+		String place = null;
 		int i = 0;
 		int rowid = 0;
 		while ( c.moveToNext() ) {
 			tmpPicName = c.getString(0);
 			rowid = c.getInt(1);
+			place = c.getString(2);
 			mFoodItemList[i].setPicName(tmpPicName);
 			mFoodItemList[i].setId(rowid);
+			mFoodItemList[i].setPlace(place);
 
 			i++;
 		}
@@ -241,29 +244,6 @@ public class ListViewImageActivity extends Activity {
 		return result;
 	}
 
-	public static boolean loadImageFromPath(ImageView imgView, String imgPath ) {
-		if ( null == imgView ) {
-			return false;
-		}
-		FileInputStream fin = null;
-		try {
-			fin = new FileInputStream(picDirPath+imgPath);
-			BitmapFactory.Options opt = new BitmapFactory.Options();
-			opt.inScaled = true;
-			opt.inTargetDensity = opt.inScreenDensity / 30;
-			Bitmap bmp = BitmapFactory.decodeStream(fin, null, opt);
-			imgView.setImageBitmap(bmp);
-			imgView.setAdjustViewBounds(true);
-			imgView.setMaxHeight(300);
-			imgView.setMaxWidth(150);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		return true;
-	}
 
 	private void rotateImage(ImageView imgView) {
 		Matrix matrix=new Matrix();
@@ -283,132 +263,8 @@ public class ListViewImageActivity extends Activity {
 			final String picName = item.getPicName();
 			String place = item.getPlace();
 			
-			PcvLayout layout = new PcvLayout(this);
-
-			Button up = (Button) layout.findViewById(R.id.bup);
-			
-			up.setOnClickListener(new OnClickListener(){
-				@Override
-				public void onClick(View arg0) {
-					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-					nameValuePairs.add(new BasicNameValuePair("loginName", LoginActivity.loginName));
-					nameValuePairs.add(new BasicNameValuePair("token", LoginActivity.userToken));
-					nameValuePairs.add(new BasicNameValuePair("picName", picName));
-					nameValuePairs.add(new BasicNameValuePair("type", "1"));
-					
-					PostEntity pe = new PostEntity(nameValuePairs, SelectEatingPlaceActivity.mServerIp+"/vote" );
-					MyNetworkTask netTask = new MyNetworkTask(pe){
-						@Override
-						public void postHook() {
-							mServerResultString = postNameValuePairs();
-						}
-						
-
-						@Override
-						public void afterPost() {
-							ListViewImageActivity.this.runOnUiThread(new Runnable(){
-
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									if ( mServerResultString.equals("ok")) {
-										Toast.makeText(ListViewImageActivity.this, "同步照片成功", Toast.LENGTH_SHORT).show();
-										ToggleButton btn = (ToggleButton) findViewById(R.id.fooditemshow_toggleButton);
-										btn.setChecked(true);
-									}
-									else {
-										String failReason = LoginActivity.isLoginOrReasonString(mServerResultString);
-										if ( null != failReason ) {
-											Toast.makeText(ListViewImageActivity.this, failReason, Toast.LENGTH_SHORT).show();
-											if ( failReason.equals("请登录" ) ) {
-												Intent it = new Intent();
-												it.setClass(ListViewImageActivity.this, LoginActivity.class);
-												startActivityForResult(it, 0);
-											}
-										}
-										else {
-											Toast.makeText(ListViewImageActivity.this, "同步照片失败", Toast.LENGTH_SHORT).show();
-										}
-										ToggleButton btn = (ToggleButton) findViewById(R.id.fooditemshow_toggleButton);
-										btn.setChecked(false);
-									}
-										
-									
-								}
-
-							
-							});
-						}
-					};
-					netTask.execute("");
-				}});
-			
-			
-			TextView vnumber = (TextView) layout.findViewById(R.id.vnumber);
-			vnumber.setText("0");		
-			
-			Button down = (Button) layout.findViewById(R.id.bdown);		
-			
-			down.setOnClickListener(new OnClickListener(){
-				@Override
-				public void onClick(View arg0) {
-					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-					nameValuePairs.add(new BasicNameValuePair("loginName", LoginActivity.loginName));
-					nameValuePairs.add(new BasicNameValuePair("token", LoginActivity.userToken));
-					nameValuePairs.add(new BasicNameValuePair("picName", picName));
-					nameValuePairs.add(new BasicNameValuePair("type", "-1"));
-					
-					PostEntity pe = new PostEntity(nameValuePairs, SelectEatingPlaceActivity.mServerIp+"/vote" );
-					MyNetworkTask netTask = new MyNetworkTask(pe){
-						@Override
-						public void postHook() {
-							mServerResultString = postNameValuePairs();
-						}
-						
-
-						@Override
-						public void afterPost() {
-							ListViewImageActivity.this.runOnUiThread(new Runnable(){
-
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									if ( mServerResultString.equals("ok")) {
-										Toast.makeText(ListViewImageActivity.this, "同步照片成功", Toast.LENGTH_SHORT).show();
-										ToggleButton btn = (ToggleButton) findViewById(R.id.fooditemshow_toggleButton);
-										btn.setChecked(true);
-									}
-									else {
-										String failReason = LoginActivity.isLoginOrReasonString(mServerResultString);
-										if ( null != failReason ) {
-											Toast.makeText(ListViewImageActivity.this, failReason, Toast.LENGTH_SHORT).show();
-											if ( failReason.equals("请登录" ) ) {
-												Intent it = new Intent();
-												it.setClass(ListViewImageActivity.this, LoginActivity.class);
-												startActivityForResult(it, 0);
-											}
-										}
-										else {
-											Toast.makeText(ListViewImageActivity.this, "同步照片失败", Toast.LENGTH_SHORT).show();
-										}
-										ToggleButton btn = (ToggleButton) findViewById(R.id.fooditemshow_toggleButton);
-										btn.setChecked(false);
-									}
-										
-									
-								}
-
-							
-							});
-						}
-					};
-					netTask.execute("");
-				}});
-	
-			ImageView imgView = (ImageView) layout.findViewById(R.id.playout);
-			loadImageFromPath(imgView,picName);
-			imgView.setOnClickListener(new MyOnClick(item));
-			
+			PcvLayout layout = new PcvLayout(this, item);
+		
 			TextView tv1 = (TextView) layout.findViewById(R.id.comment);
 			int i = 0;
 			String comment = "NO COMMENTS";

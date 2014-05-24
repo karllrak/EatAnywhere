@@ -49,7 +49,7 @@ public class FoodItemShowActivity extends Activity {
 	private void inflateFoodItem() {
 		// TODO Auto-generated method stub
 		ImageView imageView = (ImageView) findViewById(R.id.fooditemshow_image);
-		ListViewImageActivity.loadImageFromPath(imageView, mFoodItem.getPicName());
+		ImageLoader.loadImageFromPath(imageView, ListViewImageActivity.picDirPath+mFoodItem.getPicName());
 		TextView textView = (TextView) findViewById(R.id.fooditemshow_place);
 		textView.setText(mFoodItem.getPlace());
 		
@@ -57,14 +57,7 @@ public class FoodItemShowActivity extends Activity {
 
 	private void getFoodItem() {
 		// TODO Auto-generated method stub
-		/*
-		Intent it = getIntent();
-		it.getStringExtra("picName");
-		it.getStringExtra("place");
-		*/
-		mFoodItem = new FoodItem();
-		mFoodItem.setPicName("08_47_01.jpeg");
-		mFoodItem.setPlace("一食堂");
+		mFoodItem = (FoodItem) getIntent().getSerializableExtra("foodItem");
 	}
 
 	public void onToggleClicked(View view) {
@@ -109,9 +102,9 @@ public class FoodItemShowActivity extends Activity {
 						me.addPart("token", new StringBody(LoginActivity.userToken, Charset.forName("UTF-8")));
 					}
 
-					
-					me.addPart("picName", new StringBody(mFoodItem.getPicName(), Charset.forName("UTF-8") ));
 					me.addPart("image", new FileBody(new File(picFullName)));
+					me.addPart("picName", new StringBody(mFoodItem.getPicName(), Charset.forName("UTF-8") ));
+					me.addPart("place", new StringBody(mFoodItem.getPlace(), Charset.forName("UTF-8") ));
 					me.addPart("nono", new StringBody("yes", Charset.forName("UTF-8") ));
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
@@ -153,6 +146,9 @@ public class FoodItemShowActivity extends Activity {
 						else {
 							String failReason = LoginActivity.isLoginOrReasonString(r);
 							if ( null != failReason ) {
+								if ( 0 == failReason.length() ) {
+									failReason = "网络无响应";
+											}
 								Toast.makeText(FoodItemShowActivity.this, failReason, Toast.LENGTH_SHORT).show();
 								if ( failReason.equals("请登录" ) ) {
 									Intent it = new Intent();

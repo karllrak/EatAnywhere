@@ -116,7 +116,7 @@ public class LoginActivity extends Activity {
 
 	public static String isLoginOrReasonString( String serverResult ) {
 		//return the reason of login failed
-		//or return null
+		//or return null if it is  a json string and no err
 		JSONObject obj = null;
 		try {
 			obj = (JSONObject) new JSONTokener(serverResult).nextValue();

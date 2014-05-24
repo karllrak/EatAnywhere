@@ -37,7 +37,7 @@ public class PhotoComment extends Activity {
 
 	private void loadPreviewImage() {
 		ImageView imgView = (ImageView)findViewById(R.id.photoCommentImgView);
-		ListViewImageActivity.loadImageFromPath(imgView, mPicName);
+		ImageLoader.loadImageFromPath(imgView, ListViewImageActivity.picDirPath+mPicName);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class PhotoComment extends Activity {
 				String query = "insert into foodItem( userId, picName, place ) values ("+
 						" 'isb911', " +
 						" '"+mPicName+"', "+
-						" '"+mPicName+"' "+
+						" '"+mPlace+"' "+
 						" );";
 				databaseConnector.open();
 				databaseConnector.rawQuery(query);

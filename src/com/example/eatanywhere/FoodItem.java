@@ -20,6 +20,12 @@ public class FoodItem implements Serializable {
 	private String tag=null;
 	private String place=null;
 	private boolean isLocal=false;
+	public void setLocal() {
+		isLocal = true;
+	}
+	public void setNonLocal() {
+		isLocal = false;
+	}
 	public int getId() { 
 		return id;
 	}

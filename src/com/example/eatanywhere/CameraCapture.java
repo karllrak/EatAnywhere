@@ -136,42 +136,36 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 						@Override
 						public void onPictureTaken(byte[] data, Camera camera) {
 							final byte[] picData = data;
-							Runnable savePicThread = new Runnable() {
-								public void run(){
-									
-									BitmapFactory.Options opts = new BitmapFactory.Options();
-									opts.inSampleSize = 4;
-									Bitmap bmp = BitmapFactory.decodeByteArray(picData, 0, picData.length, opts);
-									//rotate it!
-									Matrix matrix = new Matrix();
-									matrix.preRotate(90);
-									bmp = bmp.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
+							BitmapFactory.Options opts = new BitmapFactory.Options();
+							opts.inSampleSize = 4;
+							Bitmap bmp = BitmapFactory.decodeByteArray(picData, 0, picData.length, opts);
+							//rotate it!
+							Matrix matrix = new Matrix();
+							matrix.preRotate(90);
+							bmp = bmp.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
 
-									FileOutputStream out = null;
-									try {
-										out = new FileOutputStream("/sdcard/1pic/"+((CameraCapture) mActivity).getPicName());
-									} catch (FileNotFoundException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									} finally{
-										bmp.compress(Bitmap.CompressFormat.JPEG, 90, out);
-										try {
-											out.close();
-										} catch (IOException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-									}
-									bmp.recycle();System.gc();
+							FileOutputStream out = null;
+							try {
+								out = new FileOutputStream("/sdcard/1pic/"+((CameraCapture) mActivity).getPicName());
+							} catch (FileNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} finally{
+								bmp.compress(Bitmap.CompressFormat.JPEG, 90, out);
+								try {
+									out.close();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
-							};
-							new Thread(savePicThread).start();
+							}
+							bmp.recycle();System.gc();
 							((CameraCapture) mActivity).startComment();								
-						}
-					} );
 				}
-			}
-			});
+			} );
+		}
+	}
+});
 		//addView(btn);
 		mHolder = mSurfaceView.getHolder();
 		mHolder.addCallback(this);
