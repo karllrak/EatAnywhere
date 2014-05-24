@@ -19,6 +19,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.util.Log;
 import android.view.Gravity;
@@ -89,8 +90,14 @@ public class ListViewImageActivity extends Activity {
 			tv.setText("第三食堂");
 		}
 
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		lp.setMargins(5, 10, 0, 0);
+		
 		
 		Button btn = new Button(this);
+
+		btn.setBackgroundResource(R.drawable.shape1);
+		btn.setLayoutParams(lp);
 		
 		btn.setOnClickListener(new OnClickListener(){
 			@Override
@@ -99,10 +106,14 @@ public class ListViewImageActivity extends Activity {
 				it.setClass(ListViewImageActivity.this, CameraCapture.class);
 				startActivity(it);
 			}});
-		btn.setText("拍照");
-		Button btnReload = new Button(this);
+		btn.setText("开始上传");
 		
+		Button btnReload = new Button(this);
+
 		btnReload.setText("刷新");
+		btnReload.setBackgroundResource(R.drawable.shape1);
+		btnReload.setLayoutParams(lp);
+		
 		btnReload.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
@@ -114,7 +125,7 @@ public class ListViewImageActivity extends Activity {
 		ArrayAdapter<String> spAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, spitem);
 		sp.setAdapter(spAdapter);
 		TextView txtb = new TextView(this);
-		txtb.setText("                       ");
+		txtb.setText("          ");
 
 		
 		topTxtLayout.addView(tv);
@@ -131,6 +142,7 @@ public class ListViewImageActivity extends Activity {
 		totalLayout.addView(topTxtLayout);
 		totalLayout.addView(topBtnLayout);
 		totalLayout.addView(imageLayout);
+		totalLayout.setBackgroundColor(Color.YELLOW);
 		mScrollView.addView(totalLayout);
 		//setContentView(R.layout.activity_main);
 		setContentView(mScrollView);
@@ -282,9 +294,9 @@ public class ListViewImageActivity extends Activity {
 			tv1.setOnClickListener(new MyOnClick(item));
 			
 			TextView user = (TextView) layout.findViewById(R.id.user);
-			user.setText("user: local");
+			user.setText("local");
 			TextView time = (TextView) layout.findViewById(R.id.time);
-			time.setText("time: just now");
+			time.setText("just now");
 
 			
 			totalLayout.addView(layout);
