@@ -42,19 +42,19 @@ public class SelectEatingPlaceActivity extends Activity {
 	
 	public void one( View v ) {
 		Intent it = new Intent();
-		it.putExtra("placeToEat", "one");
+		it.putExtra("placeToEat", "一食堂");
 		it.setClass(SelectEatingPlaceActivity.this, ListViewImageActivity.class);
 		startActivity(it);
 	}
 	public void two( View v ) {
 		Intent it = new Intent();
-		it.putExtra("placeToEat", "two");
+		it.putExtra("placeToEat", "二食堂");
 		it.setClass(SelectEatingPlaceActivity.this, ListViewImageActivity.class);
 		startActivity(it);
 	}	
 	public void three( View v ) {
 		Intent it = new Intent();
-		it.putExtra("placeToEat", "three");
+		it.putExtra("placeToEat", "三食堂");
 		it.setClass(SelectEatingPlaceActivity.this, ListViewImageActivity.class);
 		startActivity(it);
 	}

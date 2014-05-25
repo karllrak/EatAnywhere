@@ -12,6 +12,13 @@ public class FoodComment {
 	private int replyId;
 	private int itemId;
 	private String content;
+	private String creatime;
+	public void setCreatime( String t ) {
+		creatime = t;
+	}
+	public String getCreatime() {
+		return creatime;
+	}
 	public String getContent() {
 		return content;
 	}

@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,7 @@ import android.database.Cursor;
 
 public class ListViewImageActivity extends Activity {
 	//FIXME: why we need asynctask when getPicCommentList
-	public static String picDirPath=Environment.getExternalStorageDirectory()+"/1pic/";
+	public static String picDirPath=Environment.getExternalStorageDirectory()+"/EatPic/";
 	private String picFileType="jpeg";
 	private HashMap mItemList;
 	private FoodItem[] mFoodItemList=null;
@@ -53,23 +54,24 @@ public class ListViewImageActivity extends Activity {
 	private ScrollView mScrollView=null;
 	private String placeToEat=null;
 	private String mServerResultString = "";
+	private String[] mPicFullPathNameArrayInSDCard=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		//create the dir for saving pics
+		File createDirOrExist = new File(picDirPath);
+		createDirOrExist.mkdir();
+
 		//显示从哪个食堂点击进来的
 		Intent it = getIntent();
 		placeToEat = it.getStringExtra("placeToEat");
-		Toast.makeText(this, placeToEat, Toast.LENGTH_SHORT).show();
 
 		mScrollView = new ScrollView(this);
-		String[] picFullPathNameArray = getPicNamePathList();
-		getPicCommentList();
-		//filter the image by name( by the XXXXn.jpeg where n is the last number before dot
-		//e.g. 6->0 7->1
-		picFullPathNameArray = filterPictureByName(placeToEat, picFullPathNameArray);
-
+		mPicFullPathNameArrayInSDCard = getPicNamePathList();
+		mFoodItemList = DataLoader.getFoodItemListByPicnameArray(this, mPicFullPathNameArrayInSDCard);
+		mCommentList = DataLoader.getPicCommentList(this);
 
 		LinearLayout totalLayout = new LinearLayout(this);
 		totalLayout.setOrientation(LinearLayout.VERTICAL);
@@ -82,9 +84,9 @@ public class ListViewImageActivity extends Activity {
 			
 		TextView tv = new TextView(this);
 		tv.setTextSize(20);
-		if ( placeToEat.equals("one") ) {
+		if ( placeToEat.equals("一食堂") ) {
 			tv.setText("第一食堂");
-		} else if ( placeToEat.equals("two") ) {
+		} else if ( placeToEat.equals("二食堂") ) {
 			tv.setText("第二食堂");
 		} else {
 			tv.setText("第三食堂");
@@ -117,7 +119,12 @@ public class ListViewImageActivity extends Activity {
 		btnReload.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				reload();
+				try {
+					reload();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		
 		Spinner sp = new Spinner(this);
@@ -137,7 +144,12 @@ public class ListViewImageActivity extends Activity {
 		
 		LinearLayout imageLayout = new LinearLayout(this);
 		imageLayout.setOrientation(LinearLayout.VERTICAL);
-		loadImageList(imageLayout, picFullPathNameArray);
+		try {
+			loadImageList(imageLayout, mPicFullPathNameArrayInSDCard);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		totalLayout.addView(topTxtLayout);
 		totalLayout.addView(topBtnLayout);
@@ -161,66 +173,18 @@ public class ListViewImageActivity extends Activity {
 		super.onStop();
 	}
 
-	private void reload(){
-		getPicCommentList();
+	private void reload() throws ParseException{
+		mPicFullPathNameArrayInSDCard = getPicNamePathList();
+		mFoodItemList = DataLoader.getFoodItemListByPicnameArray(this, mPicFullPathNameArrayInSDCard);
+		mCommentList = DataLoader.getPicCommentList(this);
+
 		LinearLayout imageLayout = (LinearLayout) mScrollView.getChildAt(0);
 		imageLayout = (LinearLayout) imageLayout.getChildAt(2);
 		imageLayout.removeAllViews();
 		String[] newPicNameList = getPicNamePathList();
-		newPicNameList = filterPictureByName(placeToEat,newPicNameList);
 		loadImageList(imageLayout,newPicNameList);
-		/* so asynctask 
-		newPicNameList = filterPictureByName(placeToEat,newPicNameList);
-		loadImageList(imageLayout,newPicNameList);
-		 */
 	}
 
-	private void getPicCommentList() {
-		//load the picture comment into mFoodComment
-		DatabaseConnector databaseConnector = new DatabaseConnector(ListViewImageActivity.this);
-		databaseConnector.open();
-		//load the picname first
-		Cursor c = databaseConnector.database.query("foodItem", new String[] {"picName", "rowid","place"}, null, null, null, null, null);
-		Log.e("", ""+c.getCount());
-		mFoodItemList = new FoodItem[c.getCount()];
-		for (int i = 0; i < mFoodItemList.length; i++ ) {
-			mFoodItemList[i] = new FoodItem();
-		}
-		String tmpPicName = null;
-		String place = null;
-		int i = 0;
-		int rowid = 0;
-		while ( c.moveToNext() ) {
-			tmpPicName = c.getString(0);
-			rowid = c.getInt(1);
-			place = c.getString(2);
-			mFoodItemList[i].setPicName(tmpPicName);
-			mFoodItemList[i].setId(rowid);
-			mFoodItemList[i].setPlace(place);
-
-			i++;
-		}
-		c.close();
-		//load the comments
-		c = databaseConnector.database.query("foodComment", 
-				new String[] {"itemId", "content"}, null, null, null, null, null);
-		mCommentList = new FoodComment[c.getCount()]; 
-		for (int j = 0; j < mCommentList.length; j++ ) {
-			mCommentList[j] = new FoodComment();
-		}
-		i = 0;
-		int tmpId = 0;
-		String tmpContent = null;
-		while ( c.moveToNext() ) {
-			tmpId = c.getInt(0);
-			tmpContent = c.getString(1);
-			mCommentList[i].setContent(tmpContent);
-			mCommentList[i].setItemId(tmpId);
-			i++;
-		}
-		c.close();
-		databaseConnector.close();
-	}
 
 	private String[] getPicNamePathList() {
 		File picDir = new File(picDirPath);
@@ -256,16 +220,7 @@ public class ListViewImageActivity extends Activity {
 		return result;
 	}
 
-
-	private void rotateImage(ImageView imgView) {
-		Matrix matrix=new Matrix();
-		imgView.setScaleType(ScaleType.MATRIX);   //required
-		matrix.postRotate((float) 90f,imgView.getDrawable()
-				.getBounds().width()/2, imgView.getDrawable().getBounds().height()/2); 
-		imgView.setImageMatrix(matrix);
-	}
-
-	private boolean loadImageList( View v, String[] picNameArray ) {
+	private boolean loadImageList( View v, String[] picNameArray ) throws ParseException {
 		LinearLayout totalLayout = new LinearLayout(this);
 		totalLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -273,6 +228,23 @@ public class ListViewImageActivity extends Activity {
 		for ( FoodItem item : mFoodItemList ) {
 			//each layout item stored in a vertical linearLayout
 			final String picName = item.getPicName();
+
+			//not the right place?
+			if (!placeToEat.equals(item.getPlace())) {
+				continue;
+			}
+
+			//no such picture?
+			boolean picNameFound = false;
+			for ( int i = 0; i < mPicFullPathNameArrayInSDCard.length; i++ ) {
+				if ( mPicFullPathNameArrayInSDCard[i].equals(picName)){
+					picNameFound = true;
+				}
+			}
+			if (!picNameFound) {
+				continue;
+			}
+
 			String place = item.getPlace();
 			
 			PcvLayout layout = new PcvLayout(this, item);
@@ -296,7 +268,7 @@ public class ListViewImageActivity extends Activity {
 			TextView user = (TextView) layout.findViewById(R.id.user);
 			user.setText("local");
 			TextView time = (TextView) layout.findViewById(R.id.time);
-			time.setText("just now");
+			time.setText( DataLoader.betterTimeShow(item.getCreatime()) );
 
 			
 			totalLayout.addView(layout);

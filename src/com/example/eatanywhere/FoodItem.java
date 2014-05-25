@@ -20,6 +20,13 @@ public class FoodItem implements Serializable {
 	private String tag=null;
 	private String place=null;
 	private boolean isLocal=false;
+	private String creatime;
+	public void setCreatime( String t ) {
+		creatime = t;
+	}
+	public String getCreatime() {
+		return creatime;
+	}
 	public void setLocal() {
 		isLocal = true;
 	}

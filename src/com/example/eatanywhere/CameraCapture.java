@@ -45,7 +45,6 @@ public class CameraCapture extends Activity {
 	
 	public String genPicName() {
 		Calendar cal = Calendar.getInstance();
-		cal.getTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		mPicName = sdf.format(cal.getTime())+(int)(65535*Math.random())+".jpeg";
 		return mPicName;
@@ -146,7 +145,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 
 							FileOutputStream out = null;
 							try {
-								out = new FileOutputStream("/sdcard/1pic/"+((CameraCapture) mActivity).getPicName());
+								out = new FileOutputStream(ListViewImageActivity.picDirPath+((CameraCapture) mActivity).getPicName());
 							} catch (FileNotFoundException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
