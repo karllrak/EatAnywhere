@@ -54,6 +54,7 @@ public class LoginActivity extends Activity {
 		MyNetworkTask netTask = new MyNetworkTask(pe){
 			@Override
 			public void postHook() {
+				mServerResultString = "";
 				mServerResultString = postNameValuePairs();
 			}
 
@@ -65,6 +66,11 @@ public class LoginActivity extends Activity {
 					public void run() {
 						// TODO Auto-generated method stub
 						try {
+							if ( mServerResultString.length() <= 0 ) {
+								String fail= "网络无响应";
+								Toast.makeText(LoginActivity.this, fail, Toast.LENGTH_SHORT).show();
+								return;
+							}
 							if ( isLoginSucceeded() ) {
 								setNewLoginToken();
 								Toast.makeText( LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();

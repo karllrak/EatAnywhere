@@ -21,6 +21,7 @@ public class FoodItem implements Serializable {
 	private String place=null;
 	private boolean isLocal=false;
 	private String creatime;
+	private int score = 0;
 	public void setCreatime( String t ) {
 		creatime = t;
 	}
@@ -62,5 +63,11 @@ public class FoodItem implements Serializable {
 	}
 	public void setPicName(String picName) {
 		this.picName = picName;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
 	}
 }

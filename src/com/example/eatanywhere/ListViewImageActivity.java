@@ -53,6 +53,7 @@ public class ListViewImageActivity extends Activity {
 	private FoodComment[] mCommentList=null;
 	private ScrollView mScrollView=null;
 	private String placeToEat=null;
+	private ArrayList<PcvLayout> mPcvLayoutList = new ArrayList<PcvLayout>();
 	private String mServerResultString = "";
 	private String[] mPicFullPathNameArrayInSDCard=null;
 
@@ -158,6 +159,7 @@ public class ListViewImageActivity extends Activity {
 		mScrollView.addView(totalLayout);
 		//setContentView(R.layout.activity_main);
 		setContentView(mScrollView);
+		DataLoader.loadScoreFromNetWork(this, mPcvLayoutList);
 	}
 
 	@Override
@@ -248,6 +250,7 @@ public class ListViewImageActivity extends Activity {
 			String place = item.getPlace();
 			
 			PcvLayout layout = new PcvLayout(this, item);
+			mPcvLayoutList.add(layout);
 		
 			TextView tv1 = (TextView) layout.findViewById(R.id.comment);
 			int i = 0;
