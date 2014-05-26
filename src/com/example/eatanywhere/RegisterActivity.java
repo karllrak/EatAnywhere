@@ -49,6 +49,7 @@ public class RegisterActivity extends Activity {
 		MyNetworkTask netTask = new MyNetworkTask(pe){
 			@Override
 			public void postHook() {
+				mServerResultString = "";
 				mServerResultString = postNameValuePairs();
 			}
 
@@ -60,6 +61,11 @@ public class RegisterActivity extends Activity {
 					public void run() {
 						// TODO Auto-generated method stub
 						try {
+							if ( mServerResultString.length() <= 0 ) {
+								String fail= "网络无响应";
+								Toast.makeText(RegisterActivity.this, fail, Toast.LENGTH_SHORT).show();
+								return;
+							}
 							if ( isRegisterSucceeded() ) {
 								Toast.makeText( RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
 								finish();

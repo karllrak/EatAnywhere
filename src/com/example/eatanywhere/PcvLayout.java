@@ -56,6 +56,17 @@ public class PcvLayout extends LinearLayout {
 		loadImage();
 	}
 		
+	public void updateScore() {
+		mActivity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				((TextView) PcvLayout.this.findViewById(R.id.vnumber)).setText(""+mFoodItem.getScore());
+			}
+			
+		});
+	}
 	private void loadImage() {
 		ImageView imgView = (ImageView) findViewById(R.id.playout);
 		ImageLoader.loadImageFromPath(imgView,ListViewImageActivity.picDirPath+getPicName());
