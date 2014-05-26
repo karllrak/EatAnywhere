@@ -51,10 +51,13 @@ public class CameraCapture extends Activity {
 	}
 	
 	public void startComment() {
+		Intent formIt = getIntent();
 		Intent it = new Intent();
 		it.putExtra("picName", getPicName());
+		it.putExtra("placeToEat", formIt.getStringExtra("placeToEat"));
 		it.setClass(CameraCapture.this, PhotoComment.class);
 		startActivity(it);
+		finish();
 	}
 
 	@Override

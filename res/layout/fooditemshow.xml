@@ -9,47 +9,64 @@
         android:gravity="center_horizontal"
         android:orientation="vertical" >
         
-
     <ImageView
         android:id="@+id/fooditemshow_image"
-        android:layout_width="192dp"
-        android:layout_height="320dp" />
-
-    <ToggleButton
-        android:id="@+id/fooditemshow_toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOn="已同步"
-        android:onClick="onToggleClicked"
-        android:textOff="未同步" />
+        android:layout_width="fill_parent"
+        android:layout_height="320dp"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/fooditemshow_comment"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-		android:id="@+id/fooditemshow_place"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/fooditemshow_changeBtn"
-        android:text="修改"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/fooditemshow_backBtn"
-        android:text="返回"
-        android:onClick="finishActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/fooditemshow_time"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/fooditemshow_user"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/fooditemshow_place"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <ToggleButton
+                android:id="@+id/fooditemshow_toggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@drawable/shape1"
+                android:onClick="onToggleClicked"
+                android:textOff="未同步"
+                android:textOn="已同步" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     </LinearLayout>
     
 

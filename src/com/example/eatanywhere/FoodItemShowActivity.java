@@ -50,8 +50,15 @@ public class FoodItemShowActivity extends Activity {
 		// TODO Auto-generated method stub
 		ImageView imageView = (ImageView) findViewById(R.id.fooditemshow_image);
 		ImageLoader.loadImageFromPath(imageView, ListViewImageActivity.picDirPath+mFoodItem.getPicName());
-		TextView textView = (TextView) findViewById(R.id.fooditemshow_place);
-		textView.setText(mFoodItem.getPlace());
+		
+		TextView txtplace = (TextView) findViewById(R.id.fooditemshow_place);
+		txtplace.setText("地点："+mFoodItem.getPlace());
+		
+		TextView txttime = (TextView) findViewById(R.id.fooditemshow_time);
+		txttime.setText("时间："+mFoodItem.getCreatime());
+		
+		TextView txtuser = (TextView) findViewById(R.id.fooditemshow_user);
+		txtuser.setText("用户："+mFoodItem.getUserId());
 		
 	}
 

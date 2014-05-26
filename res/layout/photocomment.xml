@@ -11,22 +11,21 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
         >
+
     <ImageView
         android:id="@+id/photoCommentImgView"
-        android:layout_width="192dp"
-        android:layout_height="320dp" />
+        android:layout_width="fill_parent"
+        android:layout_height="320dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp" />
 
     <EditText
         android:id="@+id/comment"
         android:layout_width="240dip"
-        android:background="@drawable/betteredittext"
         android:layout_height="wrap_content"
-        android:hint="评论两句..." />
-
-    <Spinner
-        android:id="@+id/photocomment_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shape1"
+        android:hint="评论两句...                                                                          " />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -35,19 +34,19 @@
 
         <Button
             android:id="@+id/SaveComment"
-            android:background="@drawable/betterbutton"
-            android:text="确定"
-            android:onClick="saveComment"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape1"
+            android:onClick="saveComment"
+            android:text="确定" />
 
         <Button
             android:id="@+id/CancelComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/SaveComment"
             android:layout_marginLeft="10dip"
-            android:background="@drawable/betterbutton"
+            android:layout_toRightOf="@+id/SaveComment"
+            android:background="@drawable/shape1"
             android:onClick="cancelComment"
             android:text="取消" />
         

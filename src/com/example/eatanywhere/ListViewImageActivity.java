@@ -105,6 +105,7 @@ public class ListViewImageActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				Intent it = new Intent();
+				it.putExtra("placeToEat", placeToEat);
 				it.setClass(ListViewImageActivity.this, CameraCapture.class);
 				startActivity(it);
 			}});

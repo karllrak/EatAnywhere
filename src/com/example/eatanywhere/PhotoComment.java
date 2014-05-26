@@ -2,6 +2,7 @@ package com.example.eatanywhere;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,18 +24,18 @@ public class PhotoComment extends Activity {
 		super.onCreate(savedInstanceState);
 		mPicName = getIntent().getStringExtra("picName");
 		setContentView(R.layout.photocomment);
-		Spinner placeSelectSpinner = (Spinner) findViewById(R.id.photocomment_spinner);
-		String[] placeList = PhotoComment.getPlaceList();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, placeList);
-		placeSelectSpinner.setAdapter(adapter);
+		//Spinner placeSelectSpinner = (Spinner) findViewById(R.id.photocomment_spinner);
+		//String[] placeList = PhotoComment.getPlaceList();
+		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, placeList);
+		//placeSelectSpinner.setAdapter(adapter);
 		loadPreviewImage();
 	}
-
+/*
 	private static String[] getPlaceList() {
 		// TODO Auto-generated method stub
 		return new String[]{ "一食堂", "二食堂", "三食堂" };
 	}
-
+*/
 	private void loadPreviewImage() {
 		ImageView imgView = (ImageView)findViewById(R.id.photoCommentImgView);
 		ImageLoader.loadImageFromPath(imgView, ListViewImageActivity.picDirPath+mPicName);
@@ -48,7 +49,8 @@ public class PhotoComment extends Activity {
 	
 	public void saveComment( View v ) {
 		mComment = ((EditText)findViewById(R.id.comment)).getText().toString();
-		mPlace = (String) ((Spinner)findViewById(R.id.photocomment_spinner)).getSelectedItem();
+		Intent formIt = getIntent();
+		mPlace = formIt.getStringExtra("placeToEat");
 		if ( mComment.matches("") ) {
 			Toast.makeText(this, "请输入评论", Toast.LENGTH_SHORT).show();
 			return;
@@ -86,6 +88,8 @@ public class PhotoComment extends Activity {
 			} 
 		}; 
         saveFoodItemTask.execute((Object[]) null); 
+       
+       
 	}
 
 	public void cancelComment( View v ) {
