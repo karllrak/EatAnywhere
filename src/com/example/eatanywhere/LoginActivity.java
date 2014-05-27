@@ -74,6 +74,7 @@ public class LoginActivity extends Activity {
 							if ( isLoginSucceeded() ) {
 								setNewLoginToken();
 								Toast.makeText( LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+								SelectEatingPlaceActivity.regisLoginBtn.setText("登出");
 								finish();
 							}
 							else {

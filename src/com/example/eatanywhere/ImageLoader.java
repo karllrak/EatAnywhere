@@ -22,7 +22,7 @@ public class ImageLoader {
 			opt.inTargetDensity = opt.inScreenDensity / 30;
 			*/
 			BitmapFactory.Options opts = new BitmapFactory.Options();
-			opts.inSampleSize = 4;
+			opts.inSampleSize = 1;
 			Bitmap bmp = BitmapFactory.decodeStream(fin, null, opts);
 			imgView.setImageBitmap(bmp);
 			imgView.setAdjustViewBounds(true);

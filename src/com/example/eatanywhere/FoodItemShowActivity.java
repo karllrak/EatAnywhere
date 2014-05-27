@@ -114,6 +114,7 @@ public class FoodItemShowActivity extends Activity {
 
 					me.addPart("image", new FileBody(new File(picFullName)));
 					me.addPart("picName", new StringBody(mFoodItem.getPicName(), Charset.forName("UTF-8") ));
+					me.addPart("comment", new StringBody(mFoodItem.getComment(), Charset.forName("UTF-8") ));
 					me.addPart("place", new StringBody(mFoodItem.getPlace(), Charset.forName("UTF-8") ));
 					me.addPart("nono", new StringBody("yes", Charset.forName("UTF-8") ));
 				} catch (UnsupportedEncodingException e) {

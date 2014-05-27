@@ -6,7 +6,9 @@ import java.io.FilenameFilter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -45,6 +47,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.ClipData.Item;
 import android.database.Cursor;
 
 public class ListViewImageActivity extends Activity {
@@ -52,8 +55,8 @@ public class ListViewImageActivity extends Activity {
 	public static String picDirPath=Environment.getExternalStorageDirectory()+"/EatPic/";
 	private String picFileType="jpeg";
 	private HashMap mItemList;
-	private FoodItem[] mFoodItemList=null;
-	private FoodComment[] mCommentList=null;
+	public ArrayList<FoodItem> mFoodItemList=null;
+	private ArrayList<FoodComment> mCommentList=null;
 	private ScrollView mScrollView=null;
 	private String placeToEat=null;
 	private ArrayList<PcvLayout> mPcvLayoutList = new ArrayList<PcvLayout>();
@@ -74,7 +77,8 @@ public class ListViewImageActivity extends Activity {
 
 		mScrollView = new ScrollView(this);
 		mPicFullPathNameArrayInSDCard = getPicNamePathList();
-		mFoodItemList = DataLoader.getFoodItemListByPicnameArray(this, mPicFullPathNameArrayInSDCard);
+		mFoodItemList = new ArrayList<FoodItem>();
+		DataLoader.getFoodItemListByPicnameArray(this, mPicFullPathNameArrayInSDCard, mFoodItemList);
 		mCommentList = DataLoader.getPicCommentList(this);
 
 		LinearLayout totalLayout = new LinearLayout(this);
@@ -162,8 +166,10 @@ public class ListViewImageActivity extends Activity {
 	    			try {
 						reload();
 					} catch (ParseException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					Log.e("", "reload");
 	    		}
 	    		@Override
 	    		public void onNothingSelected(AdapterView<?> parent) {
@@ -187,7 +193,7 @@ public class ListViewImageActivity extends Activity {
 		LinearLayout imageLayout = new LinearLayout(this);
 		imageLayout.setOrientation(LinearLayout.VERTICAL);
 		try {
-			loadImageList(imageLayout, mPicFullPathNameArrayInSDCard);
+			loadImageList(imageLayout);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -218,18 +224,22 @@ public class ListViewImageActivity extends Activity {
 		super.onStop();
 	}
 
-	private void reload() throws ParseException{
+	public void reload() throws ParseException{
 		mPicFullPathNameArrayInSDCard = getPicNamePathList();
-		mFoodItemList = DataLoader.getFoodItemListByPicnameArray(this, mPicFullPathNameArrayInSDCard);
+		DataLoader.getFoodItemListByPicnameArray(this, mPicFullPathNameArrayInSDCard, mFoodItemList);
+		Log.e("", ""+mFoodItemList.size()+" files loaded");
 		mCommentList = DataLoader.getPicCommentList(this);
+		Log.e("", ""+mCommentList.size()+" commment loaded");
+		DataLoader.loadPicFromNetworkToPcvList(this, mFoodItemList);
+		DataLoader.loadScoreFromNetWork(this, mPcvLayoutList);
 		
-		Arrays.sort(mFoodItemList);
+		Collections.sort(mFoodItemList);
 
 		LinearLayout imageLayout = (LinearLayout) mScrollView.getChildAt(0);
 		imageLayout = (LinearLayout) imageLayout.getChildAt(2);
 		imageLayout.removeAllViews();
 		String[] newPicNameList = getPicNamePathList();
-		loadImageList(imageLayout,newPicNameList);
+		loadImageList(imageLayout);
 	}
 
 
@@ -267,12 +277,14 @@ public class ListViewImageActivity extends Activity {
 		return result;
 	}
 
-	private boolean loadImageList( View v, String[] picNameArray ) throws ParseException {
+	private boolean loadImageList( View v ) throws ParseException {
 		LinearLayout totalLayout = new LinearLayout(this);
 		totalLayout.setOrientation(LinearLayout.VERTICAL);
 
 		//for ( String picName: picNameArray ) {
-		for ( FoodItem item : mFoodItemList ) {
+		Iterator<FoodItem> iter = mFoodItemList.iterator();
+		while ( iter.hasNext() ) {
+			FoodItem item = iter.next();
 			//each layout item stored in a vertical linearLayout
 			final String picName = item.getPicName();
 
@@ -300,15 +312,22 @@ public class ListViewImageActivity extends Activity {
 			TextView tv1 = (TextView) layout.findViewById(R.id.comment);
 			int i = 0;
 			String comment = "尚未评论";
-			for ( i = 0; i < mCommentList.length; i++ ) {
-				if ( mCommentList[i].getItemId() ==  item.getId() ) {
-					comment = mCommentList[i].getContent();
+			for ( i = 0; i < mCommentList.size(); i++ ) {
+				if ( mCommentList.get(i).getItemId() ==  item.getId() ) {
+					comment = mCommentList.get(i).getContent();
 				}
 			}
-			item.setComment(comment);
+
 			//tv.setText("this is image"+picName+'\n'+comment);
 			if ( null != comment && comment.length() > 0 ) {
-				tv1.setText(comment);
+				//if item has one (from net) set it!
+				if ( item.getComment() == null || item.getComment().length() <= 0 ) {
+					item.setComment(comment);
+					tv1.setText(comment);
+				}
+				else{
+					tv1.setText(item.getComment());
+				}
 			} else {
 				tv1.setText("");
 			}			

@@ -69,6 +69,9 @@ public class PcvLayout extends LinearLayout {
 	}
 	private void loadImage() {
 		ImageView imgView = (ImageView) findViewById(R.id.playout);
+		imgView.setAdjustViewBounds(true);
+		imgView.setMaxHeight(100);
+		imgView.setMaxWidth(75);
 		ImageLoader.loadImageFromPath(imgView,ListViewImageActivity.picDirPath+getPicName());
 		imgView.setOnClickListener(new OnClickListener() {
 

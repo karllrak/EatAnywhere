@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 public class SelectEatingPlaceActivity extends Activity {
 	public static String mServerIp = "10.254.239.1:8080";
+	public static Button regisLoginBtn = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +24,17 @@ public class SelectEatingPlaceActivity extends Activity {
 		setContentView(R.layout.selecteatingplace);
 		
 		Button btn = (Button) findViewById(R.id.relo);
+		regisLoginBtn = btn;
 
 		
 		btn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
-				
+				String loginText = SelectEatingPlaceActivity.regisLoginBtn.getText().toString();
+				if ( loginText.equals("登出") ) {
+					SelectEatingPlaceActivity.regisLoginBtn.setText("登陆/注册");
+					return;
+				}
 				Intent it = new Intent();
 				it.setClass(SelectEatingPlaceActivity.this, LoginActivity.class);
 				startActivity(it);

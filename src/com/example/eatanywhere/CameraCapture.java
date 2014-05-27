@@ -145,6 +145,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 							Matrix matrix = new Matrix();
 							matrix.preRotate(90);
 							bmp = bmp.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
+							bmp = bmp.createScaledBitmap(bmp, 210, 280, false);
 
 							FileOutputStream out = null;
 							try {
