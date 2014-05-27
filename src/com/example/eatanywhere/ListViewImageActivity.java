@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -28,6 +29,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -84,7 +87,7 @@ public class ListViewImageActivity extends Activity {
 
 			
 		TextView tv = new TextView(this);
-		tv.setTextSize(20);
+		tv.setTextSize(25);
 		if ( placeToEat.equals("一食堂") ) {
 			tv.setText("第一食堂");
 		} else if ( placeToEat.equals("二食堂") ) {
@@ -133,6 +136,31 @@ public class ListViewImageActivity extends Activity {
 		String[] spitem = new String[] {"按时间排序", "按评分排序"};		
 		ArrayAdapter<String> spAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, spitem);
 		sp.setAdapter(spAdapter);
+		
+	    sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+	    		@Override
+	    		public void onItemSelected(AdapterView<?> parent, View view,
+	    				int position, long id) {
+	    			if (position == 0) {
+	    				FoodItem.sortByScore = false;
+	    				FoodItem.sortByTime = true;
+	    			} else {
+	    				FoodItem.sortByScore = true;
+	    				FoodItem.sortByTime = false;
+	    			}
+	    			try {
+						reload();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+	    		}
+	    		@Override
+	    		public void onNothingSelected(AdapterView<?> parent) {
+	    			// TODO Auto-generated method stub
+	    		}
+
+	    });
+		
 		TextView txtb = new TextView(this);
 		txtb.setText("          ");
 
@@ -156,8 +184,9 @@ public class ListViewImageActivity extends Activity {
 		totalLayout.addView(topTxtLayout);
 		totalLayout.addView(topBtnLayout);
 		totalLayout.addView(imageLayout);
-		totalLayout.setBackgroundColor(Color.YELLOW);
+		//totalLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
 		mScrollView.addView(totalLayout);
+		mScrollView.setBackgroundColor(getResources().getColor(R.color.maincolor));
 		//setContentView(R.layout.activity_main);
 		setContentView(mScrollView);
 		DataLoader.loadScoreFromNetWork(this, mPcvLayoutList);
@@ -180,6 +209,8 @@ public class ListViewImageActivity extends Activity {
 		mPicFullPathNameArrayInSDCard = getPicNamePathList();
 		mFoodItemList = DataLoader.getFoodItemListByPicnameArray(this, mPicFullPathNameArrayInSDCard);
 		mCommentList = DataLoader.getPicCommentList(this);
+		
+		Arrays.sort(mFoodItemList);
 
 		LinearLayout imageLayout = (LinearLayout) mScrollView.getChildAt(0);
 		imageLayout = (LinearLayout) imageLayout.getChildAt(2);
@@ -255,12 +286,13 @@ public class ListViewImageActivity extends Activity {
 		
 			TextView tv1 = (TextView) layout.findViewById(R.id.comment);
 			int i = 0;
-			String comment = "NO COMMENTS";
+			String comment = "尚未评论";
 			for ( i = 0; i < mCommentList.length; i++ ) {
 				if ( mCommentList[i].getItemId() ==  item.getId() ) {
 					comment = mCommentList[i].getContent();
 				}
 			}
+			item.setComment(comment);
 			//tv.setText("this is image"+picName+'\n'+comment);
 			if ( null != comment && comment.length() > 0 ) {
 				tv1.setText(comment);

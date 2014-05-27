@@ -6,31 +6,38 @@
     android:orientation="vertical" >
     
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightyellow"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/photoCommentImgView"
         android:layout_width="fill_parent"
-        android:layout_height="320dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp" />
+        android:layout_height="400dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp" />
 
-    <EditText
-        android:id="@+id/comment"
-        android:layout_width="240dip"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/shape1"
-        android:hint="评论两句...                                                                          " />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/comment"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shape1"
+            android:ems="10"
+            android:height="50dp"
+            android:hint="评论两句..."
+            android:padding="5dp" >
+
+            <requestFocus />
+        </EditText>
 
         <Button
             android:id="@+id/SaveComment"
@@ -38,19 +45,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape1"
             android:onClick="saveComment"
-            android:text="确定" />
+            android:text="上传" />
 
-        <Button
-            android:id="@+id/CancelComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_toRightOf="@+id/SaveComment"
-            android:background="@drawable/shape1"
-            android:onClick="cancelComment"
-            android:text="取消" />
-        
-    </RelativeLayout>
+    </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

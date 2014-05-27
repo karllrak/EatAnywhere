@@ -60,6 +60,9 @@ public class FoodItemShowActivity extends Activity {
 		TextView txtuser = (TextView) findViewById(R.id.fooditemshow_user);
 		txtuser.setText("用户："+mFoodItem.getUserId());
 		
+		TextView txtcomment = (TextView) findViewById(R.id.fooditemshow_comment);
+		txtcomment.setText("评价："+mFoodItem.getComment());
+		
 	}
 
 	private void getFoodItem() {

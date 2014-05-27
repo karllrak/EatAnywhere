@@ -29,5 +29,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorForeground">#fff</item>
     </style>
+    <color name="maincolor">#ffa44c</color>
+    <color name="lightyellow">#ffa44c</color>
     
 </resources>
