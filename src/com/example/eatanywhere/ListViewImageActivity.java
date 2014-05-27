@@ -88,12 +88,21 @@ public class ListViewImageActivity extends Activity {
 			
 		TextView tv = new TextView(this);
 		tv.setTextSize(25);
+		
+		LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		lp2.setMargins(0, -50, 0, -30);
+		ImageView imv = new ImageView(this);
+		imv.setLayoutParams(lp2);
+		
 		if ( placeToEat.equals("一食堂") ) {
 			tv.setText("第一食堂");
+			imv.setImageResource(R.drawable.s11);
 		} else if ( placeToEat.equals("二食堂") ) {
 			tv.setText("第二食堂");
+			imv.setImageResource(R.drawable.s22);
 		} else {
 			tv.setText("第三食堂");
+			imv.setImageResource(R.drawable.s33);
 		}
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -102,12 +111,13 @@ public class ListViewImageActivity extends Activity {
 		
 		Button btn = new Button(this);
 
-		btn.setBackgroundResource(R.drawable.shape1);
+		btn.setBackgroundResource(R.drawable.button_selector);
 		btn.setLayoutParams(lp);
 		
 		btn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
+				
 				Intent it = new Intent();
 				it.putExtra("placeToEat", placeToEat);
 				it.setClass(ListViewImageActivity.this, CameraCapture.class);
@@ -118,13 +128,14 @@ public class ListViewImageActivity extends Activity {
 		Button btnReload = new Button(this);
 
 		btnReload.setText("刷新");
-		btnReload.setBackgroundResource(R.drawable.shape1);
+		btnReload.setBackgroundResource(R.drawable.button_selector);
 		btnReload.setLayoutParams(lp);
 		
 		btnReload.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				try {
+					
 					reload();
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -166,6 +177,7 @@ public class ListViewImageActivity extends Activity {
 
 		
 		topTxtLayout.addView(tv);
+		
 		topBtnLayout.addView(btn);
 		topBtnLayout.addView(btnReload);
 		topBtnLayout.addView(txtb);
@@ -181,7 +193,8 @@ public class ListViewImageActivity extends Activity {
 			e.printStackTrace();
 		}
 
-		totalLayout.addView(topTxtLayout);
+		//totalLayout.addView(topTxtLayout);
+		totalLayout.addView(imv);
 		totalLayout.addView(topBtnLayout);
 		totalLayout.addView(imageLayout);
 		//totalLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));

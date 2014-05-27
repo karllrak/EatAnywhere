@@ -28,6 +28,7 @@ public class SelectEatingPlaceActivity extends Activity {
 		btn.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
+				
 				Intent it = new Intent();
 				it.setClass(SelectEatingPlaceActivity.this, LoginActivity.class);
 				startActivity(it);
@@ -61,10 +62,12 @@ public class SelectEatingPlaceActivity extends Activity {
 	*/
 	
 	public void one( View v ) {
+		
 		Intent it = new Intent();
 		it.putExtra("placeToEat", "一食堂");
 		it.setClass(SelectEatingPlaceActivity.this, ListViewImageActivity.class);
 		startActivity(it);
+		
 	}
 	public void two( View v ) {
 		Intent it = new Intent();
