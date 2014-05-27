@@ -27,7 +27,7 @@ public class Add extends Activity {
 			contentEditText.setText(extras.getString("content"));
 		}
 		
-		Button saveContentButton = (Button) findViewById(R.id.button1);
+		Button saveContentButton = (Button) findViewById(R.id.relo);
 		saveContentButton.setOnClickListener(saveContentButtonClicked);
 	}
 	
