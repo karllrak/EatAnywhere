@@ -38,7 +38,7 @@
                 android:layout_width="90dp"
                 android:layout_height="25dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_selector"
+                android:background="@drawable/shape1"
                 android:text="登陆/注册" />
         </LinearLayout>
     </LinearLayout>

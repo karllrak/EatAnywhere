@@ -28,7 +28,7 @@ public class FoodItem implements Serializable, Comparable {
 	private int score = 0;
 	private String comment;
 	
-	public static boolean sortByTime = false;   
+	public static boolean sortByTime = true;   
     public static boolean sortByScore = false;
 	
 	public void setCreatime( String t ) {
