@@ -38,8 +38,8 @@ public class SelectEatingPlaceActivity extends Activity {
 				String loginText = SelectEatingPlaceActivity.regisLoginBtn.getText().toString();
 				if ( loginText.equals("登出") ) {
 					SelectEatingPlaceActivity.regisLoginBtn.setText("登陆/注册");
-					SelectEatingPlaceActivity.regisLoginBtn.setText("选择一个食堂吧!");
-					SelectEatingPlaceActivity.regisLoginBtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+					SelectEatingPlaceActivity.regisLoginTxt.setText("选择一个食堂吧!");
+					SelectEatingPlaceActivity.regisLoginTxt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
 					return;
 				}
 				Intent it = new Intent();

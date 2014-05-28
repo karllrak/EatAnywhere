@@ -68,6 +68,7 @@ public class DataLoader {
 			foodItem.setPlace(place);
 			foodItem.setLocal();
 			foodItem.setCreatime(creatime);
+			foodItem.setUserId(LoginActivity.mLoginName);
 			boolean found = false;
 			for ( FoodItem item: foodItemList) {
 				if ( item.getPicName().equals(tmpPicName)) {

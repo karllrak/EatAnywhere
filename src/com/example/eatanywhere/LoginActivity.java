@@ -22,7 +22,7 @@ public class LoginActivity extends Activity {
 
 	public static String userToken = null;
 	public static String loginName = null;
-	public static String mLoginName = null;
+	public static String mLoginName = "local";
 	public String mServerResultString="";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +72,20 @@ public class LoginActivity extends Activity {
 							if ( mServerResultString.length() <= 0 ) {
 								String fail= "网络无响应";
 								Toast.makeText(LoginActivity.this, fail, Toast.LENGTH_SHORT).show();
+								mLoginName = "local";
 								return;
 							}
 							if ( isLoginSucceeded() ) {
 								setNewLoginToken();
 								Toast.makeText( LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 								SelectEatingPlaceActivity.regisLoginBtn.setText("登出");
-								SelectEatingPlaceActivity.regisLoginBtn.setText("欢迎，"+ mLoginName);
-								SelectEatingPlaceActivity.regisLoginBtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+								SelectEatingPlaceActivity.regisLoginTxt.setText("欢迎，"+ mLoginName);
+								SelectEatingPlaceActivity.regisLoginTxt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
 								finish();
 							}
 							else {
 								showLoginFailReason();
+								mLoginName = "local";
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
