@@ -7,6 +7,7 @@ import com.example.eatanywhere.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,9 @@ import android.widget.TextView;
 public class SelectEatingPlaceActivity extends Activity {
 	public static String mServerIp = "10.254.239.1:8080";
 	public static Button regisLoginBtn = null;
+	
+	public static TextView regisLoginTxt = null;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,7 @@ public class SelectEatingPlaceActivity extends Activity {
 		
 		Button btn = (Button) findViewById(R.id.relo);
 		regisLoginBtn = btn;
+		regisLoginTxt = (TextView) findViewById(R.id.regisLoginTxt);
 
 		
 		btn.setOnClickListener(new OnClickListener(){
@@ -33,6 +38,8 @@ public class SelectEatingPlaceActivity extends Activity {
 				String loginText = SelectEatingPlaceActivity.regisLoginBtn.getText().toString();
 				if ( loginText.equals("登出") ) {
 					SelectEatingPlaceActivity.regisLoginBtn.setText("登陆/注册");
+					SelectEatingPlaceActivity.regisLoginBtn.setText("选择一个食堂吧!");
+					SelectEatingPlaceActivity.regisLoginBtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
 					return;
 				}
 				Intent it = new Intent();

@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ public class LoginActivity extends Activity {
 
 	public static String userToken = null;
 	public static String loginName = null;
+	public static String mLoginName = null;
 	public String mServerResultString="";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class LoginActivity extends Activity {
 	public void login( View v ) {
 		String loginName = ((EditText)findViewById(R.id.login_loginName)).getText().toString();
 		String password = ((EditText)findViewById(R.id.login_password)).getText().toString();
+		mLoginName = loginName;
 
 	
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
@@ -75,6 +78,8 @@ public class LoginActivity extends Activity {
 								setNewLoginToken();
 								Toast.makeText( LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 								SelectEatingPlaceActivity.regisLoginBtn.setText("登出");
+								SelectEatingPlaceActivity.regisLoginBtn.setText("欢迎，"+ mLoginName);
+								SelectEatingPlaceActivity.regisLoginBtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 								finish();
 							}
 							else {

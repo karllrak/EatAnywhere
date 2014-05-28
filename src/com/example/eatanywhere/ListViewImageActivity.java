@@ -334,7 +334,7 @@ public class ListViewImageActivity extends Activity {
 			tv1.setOnClickListener(new MyOnClick(item));
 			
 			TextView user = (TextView) layout.findViewById(R.id.user);
-			user.setText("local");
+			user.setText(item.getUserId());
 			TextView time = (TextView) layout.findViewById(R.id.time);
 			time.setText( DataLoader.betterTimeShow(item.getCreatime()) );
 
