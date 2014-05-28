@@ -6,6 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -54,8 +58,25 @@ public class FoodItemShowActivity extends Activity {
 		TextView txtplace = (TextView) findViewById(R.id.fooditemshow_place);
 		txtplace.setText("地点："+mFoodItem.getPlace());
 		
+		String foodTime = mFoodItem.getCreatime();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date date0 = null;
+		try {
+			date0 = sdf.parse(foodTime);
+		} catch (ParseException e) {	
+			e.printStackTrace();
+		}
+		Calendar c = Calendar.getInstance();
+		c.setTime(date0);
+		c.add(Calendar.MINUTE, 8 * 60);
+		date0 = c.getTime();
+		
+		foodTime = sdf.format(date0);
+		
+		
 		TextView txttime = (TextView) findViewById(R.id.fooditemshow_time);
-		txttime.setText("时间："+mFoodItem.getCreatime());
+		txttime.setText("时间："+foodTime);
 		
 		TextView txtuser = (TextView) findViewById(R.id.fooditemshow_user);
 		txtuser.setText("用户："+mFoodItem.getUserId());
