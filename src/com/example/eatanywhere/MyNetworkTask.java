@@ -15,6 +15,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 
 import android.app.Activity;
@@ -85,6 +86,7 @@ public abstract class MyNetworkTask extends AsyncTask<String, Void, String> {
 		}
 		
 		AndroidHttpClient http_client = AndroidHttpClient.newInstance("karllrak");
+		HttpConnectionParams.setConnectionTimeout(http_client.getParams(), 3000);
 		HttpPost post = null;
 		if ( null == mtarget_url ) {
 			post = new HttpPost( "http://"+str_target_ip );

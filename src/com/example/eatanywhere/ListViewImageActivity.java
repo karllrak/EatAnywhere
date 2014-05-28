@@ -125,7 +125,7 @@ public class ListViewImageActivity extends Activity {
 				Intent it = new Intent();
 				it.putExtra("placeToEat", placeToEat);
 				it.setClass(ListViewImageActivity.this, CameraCapture.class);
-				startActivity(it);
+				startActivityForResult(it, 0);
 			}});
 		btn.setText("开始上传");
 		
@@ -209,6 +209,18 @@ public class ListViewImageActivity extends Activity {
 		//setContentView(R.layout.activity_main);
 		setContentView(mScrollView);
 		DataLoader.loadScoreFromNetWork(this, mPcvLayoutList);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+			try {
+				reload();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	@Override

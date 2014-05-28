@@ -29,6 +29,7 @@ public class PhotoComment extends Activity {
 		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, placeList);
 		//placeSelectSpinner.setAdapter(adapter);
 		loadPreviewImage();
+		setResult(9999);
 	}
 /*
 	private static String[] getPlaceList() {
